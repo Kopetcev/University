@@ -12,9 +12,8 @@ CREATE TABLE courses
 
 CREATE TABLE lesson_rooms
 (
-    lesson_room_id      SERIAL       NOT NULL PRIMARY KEY,
-    lesson_room_name    VARCHAR(50)  NOT NULL,
-    lesson_room_address VARCHAR(250) NOT NULL
+    lesson_room_id   SERIAL      NOT NULL PRIMARY KEY,
+    lesson_room_name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE lesson_time
@@ -84,7 +83,7 @@ CREATE TABLE lessons
     date           DATE   NOT NULL,
     group_id       INT    NOT NULL,
     course_id      INT    NOT NULL,
-    teacher_id    INT    NOT NULL,
+    teacher_id     INT    NOT NULL,
     lesson_room_id INT    NOT NULL,
     FOREIGN KEY (lesson_time_id) REFERENCES lesson_time,
     FOREIGN KEY (group_id) REFERENCES groups,

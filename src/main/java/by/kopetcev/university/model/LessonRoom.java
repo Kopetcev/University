@@ -5,17 +5,14 @@ import java.util.Objects;
 public class LessonRoom implements Entity<Long> {
     private Long id;
     private String name;
-    private String address;
 
-    public LessonRoom(String name, String address) {
+    public LessonRoom(String name) {
         this.name = name;
-        this.address = address;
     }
 
-    public LessonRoom(Long id, String name, String address) {
+    public LessonRoom(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.address = address;
     }
 
     public Long getId() {
@@ -34,26 +31,18 @@ public class LessonRoom implements Entity<Long> {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LessonRoom lessonRoom = (LessonRoom) o;
         return id == lessonRoom.id &&
-                Objects.equals(name, lessonRoom.name) &&
-                Objects.equals(address, lessonRoom.address);
+                Objects.equals(name, lessonRoom.name);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address);
+        return Objects.hash(id, name);
     }
 }

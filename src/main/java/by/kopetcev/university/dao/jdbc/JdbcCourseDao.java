@@ -4,18 +4,14 @@ import by.kopetcev.university.dao.CourseDao;
 import by.kopetcev.university.dao.jdbc.mappers.CourseMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.Course;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 @Repository
@@ -27,8 +23,6 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
 
     private static final String COURSE_NAME = "course_name";
 
-    private static final String CREATE = "INSERT INTO courses (course_name) VALUES (?)";
-
     private static final String UPDATE = "UPDATE courses SET course_name=? WHERE course_id =?";
 
     private static final String FIND_ALL = "SELECT course_id, course_name FROM courses";
@@ -37,24 +31,26 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
 
     private static final String DELETE_BY_ID = "DELETE FROM courses WHERE course_id =?";
 
-    private CourseMapper courseMapper;
+    private final CourseMapper courseMapper;
+
+    private final SimpleJdbcInsert insert;
 
     @Autowired
     protected JdbcCourseDao(DataSource dataSource, CourseMapper courseMapper) {
         super(dataSource);
         this.courseMapper = courseMapper;
+        this.insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(COURSE_ID);
     }
 
     @Override
     protected Course create(Course entity) {
         try {
-            SimpleJdbcInsert insertCourse = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(COURSE_ID);
             Map<String, Object> params = new HashMap<>();
             params.put(COURSE_NAME, entity.getName());
-            Number id = insertCourse.executeAndReturnKey(params);
+            Number id = insert.executeAndReturnKey(params);
             return new Course(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
-            throw new DaoException("Unable to create a new course");
+            throw new DaoException("Unable to create a new course", e);
         }
     }
 
