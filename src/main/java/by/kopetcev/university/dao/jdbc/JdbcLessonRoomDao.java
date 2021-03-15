@@ -50,7 +50,7 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
             Number id = insert.executeAndReturnKey(params);
             return new LessonRoom(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
-            throw new DaoException("Unable to create a new course", e);
+            throw new DaoException("Unable to create a new lessonRoom", e);
         }
     }
 

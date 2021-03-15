@@ -14,7 +14,7 @@ public class GroupMapper implements RowMapper<Group> {
     public static final String GROUP_NAME = "course_name";
 
     @Override
-    public Group mapRow(ResultSet resultSet, int i) throws SQLException {
+    public Group mapRow(ResultSet resultSet, int i) {
         try {
             return new Group(resultSet.getLong(GROUP_ID), resultSet.getString(GROUP_NAME));
 

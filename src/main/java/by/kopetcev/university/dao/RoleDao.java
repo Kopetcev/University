@@ -1,4 +1,6 @@
 package by.kopetcev.university.dao;
 
-public class RoleDao {
+import by.kopetcev.university.model.Role;
+
+public interface RoleDao extends CrudDao<Role, Long>  {
 }

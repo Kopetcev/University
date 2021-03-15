@@ -14,7 +14,7 @@ public class LessonRoomMapper implements RowMapper<LessonRoom> {
     public static final String LESSON_ROOM_NAME = "lesson_room_name";
 
     @Override
-    public LessonRoom mapRow(ResultSet resultSet, int i) throws SQLException {
+    public LessonRoom mapRow(ResultSet resultSet, int i) {
         try {
             return new LessonRoom(resultSet.getLong(LESSON_ROOM_ID), resultSet.getString(LESSON_ROOM_NAME));
 
