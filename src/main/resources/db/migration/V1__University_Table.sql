@@ -31,10 +31,12 @@ CREATE TABLE roles
 
 CREATE TABLE users
 (
-    user_id  SERIAL              NOT NULL PRIMARY KEY,
-    login    VARCHAR(50) UNIQUE  NOT NULL,
-    password VARCHAR(50)         NOT NULL,
-    email    VARCHAR(100) UNIQUE NOT NULL
+    user_id    SERIAL              NOT NULL PRIMARY KEY,
+    login      VARCHAR(50) UNIQUE  NOT NULL,
+    password   VARCHAR(50)         NOT NULL,
+    email      VARCHAR(100) UNIQUE NOT NULL,
+    first_name varchar(255)        NOT NULL,
+    last_name  varchar(255)        NOT NULL
 );
 
 CREATE TABLE user_roles

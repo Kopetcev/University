@@ -25,9 +25,9 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
 
     private static final String UPDATE = "UPDATE lesson_rooms SET lesson_room_name=? WHERE lesson_room_id =?";
 
-    private static final String FIND_ALL = "SELECT lesson_room_id, lesson_room_name FROM courses";
+    private static final String FIND_ALL = "SELECT lesson_room_id, lesson_room_name FROM lesson_rooms";
 
-    private static final String FIND_BY_ID = "SELECT lesson_room_id, lesson_room_name FROM courses WHERE lesson_room_id = ?";
+    private static final String FIND_BY_ID = "SELECT lesson_room_id, lesson_room_name FROM lesson_rooms WHERE lesson_room_id = ?";
 
     private static final String DELETE_BY_ID = "DELETE FROM lesson_rooms WHERE lesson_room_id =?";
 
@@ -83,4 +83,3 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
         return jdbcTemplate.update(DELETE_BY_ID, id) == 1;
     }
 }
-

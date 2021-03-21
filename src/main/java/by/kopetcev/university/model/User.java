@@ -4,33 +4,39 @@ import java.util.Objects;
 import java.util.Set;
 
 public class User implements Entity<Long> {
-    private Long userId;
+    private Long id;
     private String login;
     private String password;
     private String email;
+    private String firstName;
+    private String lastName;
     private Set<Long> idRoles;
 
-    public User(String login, String password, String email, Set<Long> idRoles) {
+    public User(String login, String password, String email, String firstName, String lastName) {
         this.login = login;
         this.password = password;
         this.email = email;
-        this.idRoles = idRoles;
+        this.firstName =firstName;
+        this.lastName = lastName;
+    }
+    public User(Long id, String login, String password, String email,String firstName, String lastName) {
+        this(login, password,email,firstName,lastName);
+        this.id = id;
     }
 
-    public User(Long id, String login, String password, String email, Set<Long> idRoles) {
-        this.userId = id;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.idRoles = idRoles;
+
+    public User(Long id, String login, String password, String email,String firstName, String lastName , Set<Long> idRoles) {
+        this(login, password,email,firstName,lastName);
+        this.id = id;
+        this.idRoles=idRoles;
     }
 
     public Long getId() {
-        return userId;
+        return id;
     }
 
     public void setId(Long userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public String getLogin() {
@@ -55,7 +61,22 @@ public class User implements Entity<Long> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Set<Long> getIdRoles() {
@@ -71,15 +92,18 @@ public class User implements Entity<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId &&
+        return Objects.equals(id, user.id) &&
                 Objects.equals(login, user.login) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(email, user.email) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
                 Objects.equals(idRoles, user.idRoles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, login, password, email, idRoles);
+        return Objects.hash(id, login, password, email, firstName, lastName, idRoles);
     }
 }
+

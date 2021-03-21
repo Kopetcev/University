@@ -2,7 +2,6 @@ package by.kopetcev.university.dao.jdbc.mappers;
 
 import by.kopetcev.university.model.Role;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;

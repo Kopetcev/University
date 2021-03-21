@@ -26,13 +26,13 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
 
     private static final String ROLE_NAME = "role_name";
 
-    private static final String UPDATE = "UPDATE groups SET role_name=? WHERE role_id =?";
+    private static final String UPDATE = "UPDATE roles SET role_name=? WHERE role_id =?";
 
     private static final String FIND_ALL = "SELECT role_id, role_name FROM roles";
 
     private static final String FIND_BY_ID = "SELECT role_id, role_name FROM roles WHERE role_id = ?";
 
-    private static final String DELETE_BY_ID = "DELETE FROM groups WHERE role_id =?";
+    private static final String DELETE_BY_ID = "DELETE FROM roles WHERE role_id =?";
 
     private final RoleMapper roleMapper;
 
@@ -86,5 +86,3 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
         return jdbcTemplate.update(DELETE_BY_ID, id) == 1;
     }
 }
-
-
