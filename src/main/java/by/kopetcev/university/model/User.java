@@ -3,6 +3,7 @@ package by.kopetcev.university.model;
 import java.util.Objects;
 import java.util.Set;
 
+
 public class User implements Entity<Long> {
     private Long id;
     private String login;
@@ -10,7 +11,7 @@ public class User implements Entity<Long> {
     private String email;
     private String firstName;
     private String lastName;
-    private Set<Long> idRoles;
+    private Set<Integer> idRoles;
 
     public User(String login, String password, String email, String firstName, String lastName) {
         this.login = login;
@@ -25,7 +26,7 @@ public class User implements Entity<Long> {
     }
 
 
-    public User(Long id, String login, String password, String email,String firstName, String lastName , Set<Long> idRoles) {
+    public User(Long id, String login, String password, String email,String firstName, String lastName , Set<Integer> idRoles) {
         this(login, password,email,firstName,lastName);
         this.id = id;
         this.idRoles=idRoles;
@@ -79,11 +80,11 @@ public class User implements Entity<Long> {
         this.lastName = lastName;
     }
 
-    public Set<Long> getIdRoles() {
+    public Set<Integer> getIdRoles() {
         return idRoles;
     }
 
-    public void setIdRoles(Set<Long> roles) {
+    public void setIdRoles(Set<Integer> roles) {
         this.idRoles = idRoles;
     }
 

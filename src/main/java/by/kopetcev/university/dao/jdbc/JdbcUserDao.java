@@ -38,9 +38,18 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     private static final String FIND_ALL = "SELECT login, password, email, first_name, last_name, roles   FROM roles";
 
-    private static final String FIND_BY_ID = "SELECT login, password, email, first_name, last_name FROM roles WHERE user_id = ?";
+    private static final String FIND_BY_ID = "SELECT * , (SELECT  ARRAY_AGG(role_id) FROM  user_roles WHERE user_id = ? \n" +
+            "GROUP BY user_id) AS roles, (SELECT  ARRAY_AGG(course_id) FROM  teacher_courses WHERE teacher_id = ? \n" +
+            "GROUP BY user_id) AS courses \n" +
+            "FROM users u\n" +
+            "LEFT JOIN students st ON u.user_id = st.student_user_id \n" +
+            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id \n" +
+            "LEFT JOIN staff  ON u.user_id = staff.staff_user_id\n" +
+            "WHERE u.user_id=?";
 
     private static final String DELETE_BY_ID = "DELETE FROM groups WHERE user_id =?";
+
+    private static final String FIND_ID_BY_LOGIN_PASSWORD = "SELECT user_id from users WHERE login = ? AND password = ?";
 
     private final UserMapper userMapper;
 
@@ -81,7 +90,7 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
     @Override
     public Optional<User> findById(Long id) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, userMapper, id));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, userMapper, id,id,id));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -95,6 +104,13 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
     @Override
     public boolean deleteById(Long id) {
         return jdbcTemplate.update(DELETE_BY_ID, id) == 1;
+    }
+
+    @Override
+    public Long findByLoginPassword(String login, String password) {
+       return jdbcTemplate.queryForObject(
+                "select last_name from t_actor where id = ?",
+                Long.class, login, password);
     }
 }
 

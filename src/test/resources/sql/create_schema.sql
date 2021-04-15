@@ -55,7 +55,7 @@ CREATE TABLE user_roles
 CREATE TABLE teachers
 (
     teacher_user_id INT NOT NULL PRIMARY KEY,
-        FOREIGN KEY (teacher_user_id) REFERENCES users
+    FOREIGN KEY (teacher_user_id) REFERENCES users
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -71,7 +71,7 @@ CREATE TABLE teacher_courses
     FOREIGN KEY (course_id) REFERENCES courses
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-        CONSTRAINT teachers_courses_unique UNIQUE (teacher_id,course_id)
+    CONSTRAINT teachers_courses_unique UNIQUE (teacher_id,course_id)
 );
 
 

@@ -15,6 +15,7 @@
 	<description>App for university users</description>
 	<properties>
 		<java.version>15</java.version>
+		<junit.version>5.7.1</junit.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,6 +46,31 @@
 			<artifactId>HikariCP</artifactId>
 			<version>3.4.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.200</version>
+			<scope>test</scope>
+		</dependency>
+
 
 	</dependencies>
 

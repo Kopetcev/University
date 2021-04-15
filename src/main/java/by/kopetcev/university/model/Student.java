@@ -7,13 +7,13 @@ public class Student extends User {
 
     private  Long groupId;
 
-    public Student(String login, String password, String email, Set<Long> roles, Long groupId) {
-        super(login, password, email, roles);
+    public Student(String login, String password, String email, String firstName, String lastName, Set<Integer> roles, Long groupId) {
+        super(login, password, email, firstName, lastName);
         this.groupId = groupId;
     }
 
-    public Student(Long id, String login, String password, String email, Set<Long> roles) {
-        super(id, login, password, email, roles);
+    public Student(Long id, String login, String password, String email, String firstName, String lastName, Set<Integer> roles, Long groupId ) {
+        super(id, login, password, email, firstName, lastName, roles);
         this.groupId = groupId;
     }
 }
