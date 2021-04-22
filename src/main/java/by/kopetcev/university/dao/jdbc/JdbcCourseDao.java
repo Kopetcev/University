@@ -33,13 +33,13 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
 
     private final CourseMapper courseMapper;
 
-    private final SimpleJdbcInsert insert;
+    private final SimpleJdbcInsert courseInsert;
 
     @Autowired
     protected JdbcCourseDao(DataSource dataSource, CourseMapper courseMapper) {
         super(dataSource);
         this.courseMapper = courseMapper;
-        this.insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(COURSE_ID);
+        this.courseInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(COURSE_ID);
     }
 
     @Override
@@ -47,7 +47,8 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
         try {
             Map<String, Object> params = new HashMap<>();
             params.put(COURSE_NAME, entity.getName());
-            Number id = insert.executeAndReturnKey(params);
+            Number id = courseInsert.executeAndReturnKey(params);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!"+id);
             return new Course(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new course", e);

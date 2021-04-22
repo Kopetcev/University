@@ -10,8 +10,8 @@ import java.sql.SQLException;
 @Component
 public class GroupMapper implements RowMapper<Group> {
 
-    public static final String GROUP_ID = "course_id";
-    public static final String GROUP_NAME = "course_name";
+    public static final String GROUP_ID = "group_id";
+    public static final String GROUP_NAME = "group_name";
 
     @Override
     public Group mapRow(ResultSet resultSet, int i) {

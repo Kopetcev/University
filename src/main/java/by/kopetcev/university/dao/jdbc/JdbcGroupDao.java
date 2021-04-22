@@ -27,21 +27,21 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
 
     private static final String UPDATE = "UPDATE groups SET group_name=? WHERE group_id =?";
 
-    private static final String FIND_ALL = "SELECT group_id, group_name FROM courses";
+    private static final String FIND_ALL = "SELECT group_id, group_name FROM groups";
 
-    private static final String FIND_BY_ID = "SELECT group_id, group_name FROM courses WHERE group_id = ?";
+    private static final String FIND_BY_ID = "SELECT group_id, group_name FROM groups WHERE group_id = ?";
 
     private static final String DELETE_BY_ID = "DELETE FROM groups WHERE group_id =?";
 
     private final GroupMapper groupMapper;
 
-    private final SimpleJdbcInsert insert;
+    private final SimpleJdbcInsert groupInsert;
 
     @Autowired
     protected JdbcGroupDao(DataSource dataSource, GroupMapper groupMapper) {
         super(dataSource);
         this.groupMapper = groupMapper;
-        this. insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(GROUP_ID);
+        this.groupInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(GROUP_ID);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
         try {
             Map<String, Object> params = new HashMap<>();
             params.put(GROUP_NAME, entity.getName());
-            Number id = insert.executeAndReturnKey(params);
+            Number id = groupInsert.executeAndReturnKey(params);
             return new Group(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new group", e);

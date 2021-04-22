@@ -36,13 +36,13 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
 
     private final RoleMapper roleMapper;
 
-    private final SimpleJdbcInsert insert;
+    private final SimpleJdbcInsert roleInsert;
 
     @Autowired
     protected JdbcRoleDao(DataSource dataSource, RoleMapper roleMapper) {
         super(dataSource);
         this.roleMapper = roleMapper;
-        this. insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(ROLE_ID);
+        this.roleInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(ROLE_ID);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
         try {
             Map<String, Object> params = new HashMap<>();
             params.put(ROLE_NAME, entity.getName());
-            Number id = insert.executeAndReturnKey(params);
+            Number id = roleInsert.executeAndReturnKey(params);
             return new Role(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new role", e);

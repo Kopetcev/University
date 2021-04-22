@@ -1,11 +1,8 @@
 package by.kopetcev.university.dao.jdbc;
 
-import by.kopetcev.university.dao.LessonRoomDao;
 import by.kopetcev.university.dao.LessonTimeDao;
-import by.kopetcev.university.dao.jdbc.mappers.LessonRoomMapper;
 import by.kopetcev.university.dao.jdbc.mappers.LessonTimeMapper;
 import by.kopetcev.university.exception.DaoException;
-import by.kopetcev.university.model.LessonRoom;
 import by.kopetcev.university.model.LessonTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -40,13 +37,13 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
 
     private final LessonTimeMapper lessonTimeMapper;
 
-    private final SimpleJdbcInsert insert;
+    private final SimpleJdbcInsert lessonTimeInsert;
 
     @Autowired
     protected JdbcLessonTimeDao(DataSource dataSource, LessonTimeMapper lessonTimeMapper) {
         super(dataSource);
         this.lessonTimeMapper = lessonTimeMapper;
-        this.insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(LESSON_TIME_ID);
+        this.lessonTimeInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(LESSON_TIME_ID);
     }
 
     @Override
@@ -55,7 +52,7 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
             Map<String, Object> params = new HashMap<>();
             params.put(LESSON_TIME_START, entity.getStart());
             params.put(LESSON_TIME_END, entity.getEnd());
-            Number id = insert.executeAndReturnKey(params);
+            Number id = lessonTimeInsert.executeAndReturnKey(params);
             return new LessonTime(id.longValue(), entity.getStart(), entity.getEnd());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new lessonTime", e);

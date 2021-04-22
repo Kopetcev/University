@@ -33,13 +33,13 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
 
     private final LessonRoomMapper lessonRoomMapper;
 
-    private final SimpleJdbcInsert insert;
+    private final SimpleJdbcInsert lessonRoomInsert;
 
     @Autowired
     protected JdbcLessonRoomDao(DataSource dataSource, LessonRoomMapper lessonRoomMapper) {
         super(dataSource);
         this.lessonRoomMapper = lessonRoomMapper;
-        this.insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(LESSON_ROOM_ID);
+        this.lessonRoomInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(LESSON_ROOM_ID);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
         try {
             Map<String, Object> params = new HashMap<>();
             params.put(LESSON_ROOM_NAME, entity.getName());
-            Number id = insert.executeAndReturnKey(params);
+            Number id = lessonRoomInsert.executeAndReturnKey(params);
             return new LessonRoom(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new lessonRoom", e);

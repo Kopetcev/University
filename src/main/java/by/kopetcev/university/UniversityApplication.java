@@ -23,6 +23,10 @@ public class UniversityApplication {
 
         JdbcUserDao userDao = context.getBean("jdbcUserDao", JdbcUserDao.class);
 
+        System.out.println(courseDao.save(new Course("hzv")).getId());
+        System.out.println(courseDao.save(new Course("123456")).getId());
+
+
 
 /*
        TestCrud testDao = context.getBean("testCrud", TestCrud.class);

@@ -3,7 +3,6 @@ package by.kopetcev.university.dao.jdbc;
 import by.kopetcev.university.dao.UserDao;
 import by.kopetcev.university.dao.jdbc.mappers.UserMapper;
 import by.kopetcev.university.exception.DaoException;
-import by.kopetcev.university.model.Role;
 import by.kopetcev.university.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -53,13 +52,13 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     private final UserMapper userMapper;
 
-    private final SimpleJdbcInsert insert;
+    private final SimpleJdbcInsert UserInsert;
 
     @Autowired
     protected JdbcUserDao(DataSource dataSource, UserMapper userMapper) {
         super(dataSource);
         this.userMapper = userMapper;
-        this.insert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(USER_ID);
+        this.UserInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(USER_ID);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
             params.put(USER_EMAIL, entity.getEmail());
             params.put(USER_FIRST_NAME, entity.getFirstName());
             params.put(USER_LAST_NAME, entity.getLastName());
-            Number id = insert.executeAndReturnKey(params);
+            Number id = UserInsert.executeAndReturnKey(params);
             return new User(id.longValue(), entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new user", e);
