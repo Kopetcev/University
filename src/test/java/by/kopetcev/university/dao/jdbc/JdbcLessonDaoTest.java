@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 @ContextConfiguration(classes = JdbcLessonDaoTestConfig.class)
 @SpringJUnitConfig
 @Sql({"/sql/database_create.sql", "/sql/insert_JdbcLessonDaoTest.sql"})
-public class JdbcLessonDaoTest {
+class JdbcLessonDaoTest {
 
     @Autowired
     private JdbcLessonDao dao;

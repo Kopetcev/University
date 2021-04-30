@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 @ContextConfiguration(classes = JdbcLessonTimeDaoTestConfig.class)
 @SpringJUnitConfig
 @Sql({"/sql/database_create.sql", "/sql/insert_JdbcLessonTimeDaoTest.sql"})
-public class JdbcLessonTimeDaoTest {
+class JdbcLessonTimeDaoTest {
 
     @Autowired
     private JdbcLessonTimeDao dao;

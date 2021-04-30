@@ -10,7 +10,7 @@ public interface RoleDao extends CrudDao<Role, Long>  {
 
     boolean assignUser(Role role, User user);
 
-    List<Role> findByUserId(Long UserId);
+    List<Role> findByUserId(Long userId);
 
     boolean  deleteByIdFromUser(Long roleId, Long userId);
 }

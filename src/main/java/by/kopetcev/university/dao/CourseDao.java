@@ -9,7 +9,7 @@ public interface CourseDao extends CrudDao<Course, Long> {
 
     boolean assignTeacher(Course course, Teacher teacher);
 
-    List<Course> findByTeacherId(Long TeacherId);
+    List<Course> findByTeacherId(Long teacherId);
 
     boolean  deleteByIdFromTeacher(Long courseId, Long teacherId);
 }

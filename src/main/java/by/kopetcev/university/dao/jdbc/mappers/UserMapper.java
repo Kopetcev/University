@@ -15,7 +15,6 @@ public class UserMapper implements RowMapper<User> {
     public static final String USER_ID = "user_id";
     public static final String TEACHER_ID = "teacher_user_id";
     public static final String STUDENT_ID = "student_user_id";
-    public static final String STAFF_ID = "staff_user_id";
     public static final String USER_LOGIN = "login";
     public static final String USER_PASSWORD = "password";
     public static final String USER_EMAIL = "email";

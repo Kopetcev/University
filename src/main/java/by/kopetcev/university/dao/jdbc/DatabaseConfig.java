@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 public class DatabaseConfig {
 
     private final ConnectionSettings connectionSettings;
-    private final String POOL_NAME = "UniversityConnectionPool";
+    private final static String POOL_NAME = "UniversityConnectionPool";
 
     @Autowired
     public DatabaseConfig(ConnectionSettings connectionSettings) {

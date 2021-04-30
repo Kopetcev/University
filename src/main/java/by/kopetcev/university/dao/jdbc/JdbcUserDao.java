@@ -48,13 +48,13 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     private final UserMapper userMapper;
 
-    private final SimpleJdbcInsert UserInsert;
+    private final SimpleJdbcInsert userInsert;
 
     @Autowired
     protected JdbcUserDao(DataSource dataSource, UserMapper userMapper) {
         super(dataSource);
         this.userMapper = userMapper;
-        this.UserInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(USER_ID);
+        this.userInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(USER_ID);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
             params.put(USER_EMAIL, entity.getEmail());
             params.put(USER_FIRST_NAME, entity.getFirstName());
             params.put(USER_LAST_NAME, entity.getLastName());
-            Number id = UserInsert.executeAndReturnKey(params);
+            Number id = userInsert.executeAndReturnKey(params);
             return new User(id.longValue(), entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new user", e);

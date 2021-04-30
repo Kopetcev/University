@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.is;
 @ContextConfiguration(classes = JdbcGroupDaoTestConfig.class)
 @SpringJUnitConfig
 @Sql({"/sql/database_create.sql", "/sql/insert_JdbcGroupDaoTest.sql"})
-public class JdbcGroupDaoTest {
+class JdbcGroupDaoTest {
 
     @Autowired
     private JdbcGroupDao dao;

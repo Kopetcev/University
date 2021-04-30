@@ -1,8 +1,5 @@
 package by.kopetcev.university.model;
 
-import java.util.Objects;
-import java.util.Set;
-
 public class Student extends User {
 
     private  Long groupId;

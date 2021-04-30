@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 @ContextConfiguration(classes = JdbcRoleDaoTestConfig.class)
 @SpringJUnitConfig
 @Sql({"/sql/database_create.sql", "/sql/insert_JdbcRoleDaoTest.sql"})
-public class JdbcRoleDaoTest {
+class JdbcRoleDaoTest {
 
     @Autowired
     private JdbcRoleDao dao;

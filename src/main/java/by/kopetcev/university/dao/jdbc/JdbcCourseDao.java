@@ -109,8 +109,8 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
     }
 
     @Override
-    public List<Course> findByTeacherId(Long TeacherId) {
-        return jdbcTemplate.query(FIND_BY_TEACHER_ID, courseMapper, TeacherId);
+    public List<Course> findByTeacherId(Long teacherId) {
+        return jdbcTemplate.query(FIND_BY_TEACHER_ID, courseMapper, teacherId);
     }
 
     @Override

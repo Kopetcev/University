@@ -13,6 +13,22 @@ import javax.sql.DataSource;
 @TestConfiguration
 public class DataSourceTestConfig {
 
+    /*
+        private static final PostgreSQLContainer POSTGRESQL_CONTAINER;
+
+
+       static {
+           POSTGRESQL_CONTAINER = new PostgreSQLContainer<>("postgres:13")
+                   .waitingFor(Wait.forListeningPort());
+           POSTGRESQL_CONTAINER.start();
+       }
+
+       @Bean(initMethod = "start", destroyMethod = "stop")
+       public  JdbcDatabaseContainer<?> jdbcDatabaseContainer() {
+           return POSTGRESQL_CONTAINER;
+       }
+
+   */
     @Bean(initMethod = "start", destroyMethod = "stop")
     public JdbcDatabaseContainer<?> jdbcDatabaseContainer() {
         return new PostgreSQLContainer<>("postgres:13")

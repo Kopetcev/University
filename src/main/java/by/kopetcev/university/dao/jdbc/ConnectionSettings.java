@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConnectionSettings {
 
-    private static int DEFAULT_MAX_POOL_SIZE = 5;
+    private final static int DEFAULT_MAX_POOL_SIZE = 5;
 
     @Value("${db.jdbcDriver}")
     private String jdbcDriver;

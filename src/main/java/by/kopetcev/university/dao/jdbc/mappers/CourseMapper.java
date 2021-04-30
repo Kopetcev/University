@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.function.Function;
 
 @Component
 public class CourseMapper implements RowMapper<Course> {
