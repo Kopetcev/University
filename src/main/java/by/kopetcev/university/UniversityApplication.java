@@ -10,6 +10,7 @@ import org.springframework.boot.web.embedded.undertow.UndertowServletWebServer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.time.LocalTime;
 import java.util.Set;
 
 @SpringBootApplication
@@ -19,38 +20,9 @@ public class UniversityApplication {
 
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
-        JdbcCourseDao courseDao = (JdbcCourseDao) context.getBean("jdbcCourseDao");
-
-        JdbcUserDao userDao = context.getBean("jdbcUserDao", JdbcUserDao.class);
-
-        System.out.println(courseDao.save(new Course("hzv")).getId());
-        System.out.println(courseDao.save(new Course("123456")).getId());
+        System.out.println(LocalTime.of(10,00).toString());
 
 
-
-/*
-       TestCrud testDao = context.getBean("testCrud", TestCrud.class);
-
-         Set<Long>  set = testDao.findId(1l);
-
-         for(Long number: set){
-             System.out.println(number);
-         }
-
- */
-        User user =  userDao.findById(1L).get();
-        System.out.println(user.getClass());
-
-        Teacher teacher = (Teacher)user;
-
-       System.out.println( userDao.findById(1L).get().getLogin());
-
-
-        //Course course = courseDao.save(new Course("MATAN"));
-
-        //System.out.println(courseDao.findById(course.getId()).get().getName());
-
-        //courseDao.deleteById(course.getId());
     }
 }
 

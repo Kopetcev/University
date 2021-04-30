@@ -11,25 +11,18 @@ public class User implements Entity<Long> {
     private String email;
     private String firstName;
     private String lastName;
-    private Set<Integer> idRoles;
 
     public User(String login, String password, String email, String firstName, String lastName) {
         this.login = login;
         this.password = password;
         this.email = email;
-        this.firstName =firstName;
+        this.firstName = firstName;
         this.lastName = lastName;
     }
-    public User(Long id, String login, String password, String email,String firstName, String lastName) {
-        this(login, password,email,firstName,lastName);
-        this.id = id;
-    }
 
-
-    public User(Long id, String login, String password, String email,String firstName, String lastName , Set<Integer> idRoles) {
-        this(login, password,email,firstName,lastName);
+    public User(Long id, String login, String password, String email, String firstName, String lastName) {
+        this(login, password, email, firstName, lastName);
         this.id = id;
-        this.idRoles=idRoles;
     }
 
     public Long getId() {
@@ -80,31 +73,73 @@ public class User implements Entity<Long> {
         this.lastName = lastName;
     }
 
-    public Set<Integer> getIdRoles() {
-        return idRoles;
-    }
-
-    public void setIdRoles(Set<Integer> roles) {
-        this.idRoles = idRoles;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(login, user.login) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(idRoles, user.idRoles);
+        if(null==id){
+            return (id==user.id);
+        }else {
+            if(!id.equals(user.id)){
+                return false;
+            }
+        }
+        if(null==login){
+            return (login==user.login);
+        }else {
+            if(!login.equals(user.login)){
+                return false;
+            }
+        }
+        if(null==password){
+            return (password==user.password);
+        }else {
+            if(!password.equals(user.password)){
+                return false;
+            }
+        }
+        if(null==email){
+            return (email==user.email);
+        }else {
+            if(!email.equals(user.email)){
+                return false;
+            }
+        }
+        if(null==firstName){
+            return (firstName==user.firstName);
+        }else {
+            if(!firstName.equals(user.firstName)){
+                return false;
+            }
+        }
+        if(null==lastName){
+            return (lastName==user.lastName);
+        }else {
+            if(!lastName.equals(user.lastName)){
+                return false;
+            }
+        }
+        return true;
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, email, firstName, lastName, idRoles);
+        return Objects.hash(id, login, password, email, firstName, lastName);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }
 

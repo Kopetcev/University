@@ -11,8 +11,8 @@ import java.sql.ResultSet;
 public class LessonTimeMapper implements RowMapper<LessonTime> {
 
     public static final String LESSON_TIME_ID = "lesson_time_id";
-    public static final String LESSON_TIME_START = "lesson_time_start";
-    public static final String LESSON_TIME_END = "lesson_time_end";
+    public static final String LESSON_TIME_START = "lesson_start";
+    public static final String LESSON_TIME_END = "lesson_end";
 
     @Override
     public LessonTime mapRow(ResultSet resultSet, int i) {

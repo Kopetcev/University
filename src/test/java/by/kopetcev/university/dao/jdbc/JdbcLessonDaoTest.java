@@ -1,12 +1,13 @@
 package by.kopetcev.university.dao.jdbc;
 
-import by.kopetcev.university.model.Group;
+import by.kopetcev.university.model.Lesson;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,48 +15,52 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.is;
 
-@ContextConfiguration(classes = JdbcGroupDaoTestConfig.class)
+@ContextConfiguration(classes = JdbcLessonDaoTestConfig.class)
 @SpringJUnitConfig
-@Sql({"/sql/database_create.sql", "/sql/insert_JdbcGroupDaoTest.sql"})
-public class JdbcGroupDaoTest {
+@Sql({"/sql/database_create.sql", "/sql/insert_JdbcLessonDaoTest.sql"})
+public class JdbcLessonDaoTest {
 
     @Autowired
-    private JdbcGroupDao dao;
+    private JdbcLessonDao dao;
 
     @Test
     void shouldCreate() {
-        Group expected = new Group("created group");
+        Lesson expected = new Lesson(3L, 2L, 3L, LocalDate.of(2021, 9, 9), 2L, 3L);
         assertThat(expected.getId(), nullValue());
 
-        Group created = dao.create(expected);
-        assertThat(created.getName(), equalTo(expected.getName()));
+        Lesson created = dao.create(expected);
+        assertThat(created.getCourseId(), equalTo(expected.getCourseId()));
+        assertThat(created.getGroupId(), equalTo(expected.getGroupId()));
+        assertThat(created.getDate(), equalTo(expected.getDate()));
+        assertThat(created.getLessonTimeId(), equalTo(expected.getLessonTimeId()));
+        assertThat(created.getLessonRoomId(), equalTo(expected.getLessonRoomId()));
         assertThat(created.getId(), notNullValue());
         assertThat(created, not(expected));
 
-        Optional<Group> actual = dao.findById(created.getId());
+        Optional<Lesson> actual = dao.findById(created.getId());
         assertThat(actual.isPresent(), is(true));
-        assertThat(created, equalTo(actual.get()));
+        assertThat(actual.get(), equalTo(created));
     }
 
     @Test
     void shouldFindOne() {
-        Optional<Group> found = dao.findById(4L);
+        Optional<Lesson> found = dao.findById(4L);
         assertThat(found.isPresent(), is(true));
-        assertThat(found.get(), equalTo(new Group(4L, "find me")));
+        assertThat(found.get(), equalTo(new Lesson(4L, 1L, 2L, 3L, LocalDate.of(2021, 10, 1), 1L, 2L)));
     }
 
     @Test
     void shouldNotFindOneNotExistent() {
-        Optional<Group> found = dao.findById(1000L);
+        Optional<Lesson> found = dao.findById(1000L);
         assertThat(found.isPresent(), is(false));
     }
 
     @Test
     void shouldFindAll() {
-        List<Group> all = dao.findAll();
-        assertThat(all, hasItems(new Group(1L, "1-G"),
-                new Group(2L, "2-G"),
-                new Group(3L, "3-G")));
+        List<Lesson> all = dao.findAll();
+        assertThat(all, hasItems(new Lesson(1L, 1L, 1L, 1L, LocalDate.of(2021, 9, 1), 1L, 1L),
+                new Lesson(2L, 2L, 2L, 2L, LocalDate.of(2021, 9, 2), 2L, 2L),
+                new Lesson(3L, 3L, 3L, 3L, LocalDate.of(2021, 9, 3), 3L, 3L)));
     }
 
     @Test
@@ -69,9 +74,9 @@ public class JdbcGroupDaoTest {
     @Test
     void shouldUpdate() {
         long id = 6L;
-        Group upGroup = new Group(id, "updated");
-        Group updated = dao.update(upGroup);
-        assertThat(updated, equalTo(upGroup));
+        Lesson upLesson = new Lesson(id, 3L, 3L, 3L, LocalDate.of(2021, 9, 6), 3L, 3L);
+        Lesson updated = dao.update(upLesson);
+        assertThat(updated, equalTo(upLesson));
         assertThat(updated, equalTo(dao.findById(id).get()));
     }
 

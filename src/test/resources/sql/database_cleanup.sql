@@ -17,7 +17,7 @@ FROM roles;
 DELETE
 FROM users;
 DELETE
-FROM lesson_time;
+FROM lesson_times;
 DELETE
 FROM lesson_rooms;
 DELETE

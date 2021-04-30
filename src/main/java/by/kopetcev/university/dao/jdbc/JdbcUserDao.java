@@ -35,20 +35,16 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     private static final String UPDATE = "UPDATE users SET login=?, password=?, email=?, first_name=?, last_name=?  WHERE user_id =?";
 
-    private static final String FIND_ALL = "SELECT login, password, email, first_name, last_name, roles   FROM roles";
+    private static final String FIND_ALL = "SELECT * FROM users u " +
+            "LEFT JOIN students st ON u.user_id = st.student_user_id " +
+            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id ";
 
-    private static final String FIND_BY_ID = "SELECT * , (SELECT  ARRAY_AGG(role_id) FROM  user_roles WHERE user_id = ? \n" +
-            "GROUP BY user_id) AS roles, (SELECT  ARRAY_AGG(course_id) FROM  teacher_courses WHERE teacher_id = ? \n" +
-            "GROUP BY user_id) AS courses \n" +
-            "FROM users u\n" +
-            "LEFT JOIN students st ON u.user_id = st.student_user_id \n" +
-            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id \n" +
-            "LEFT JOIN staff  ON u.user_id = staff.staff_user_id\n" +
+    private static final String FIND_BY_ID = "SELECT * FROM users u " +
+            "LEFT JOIN students st ON u.user_id = st.student_user_id " +
+            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id " +
             "WHERE u.user_id=?";
 
-    private static final String DELETE_BY_ID = "DELETE FROM groups WHERE user_id =?";
-
-    private static final String FIND_ID_BY_LOGIN_PASSWORD = "SELECT user_id from users WHERE login = ? AND password = ?";
+    private static final String DELETE_BY_ID = "DELETE FROM users WHERE user_id =?";
 
     private final UserMapper userMapper;
 
@@ -79,17 +75,17 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     @Override
     protected User update(User entity) {
-        if (jdbcTemplate.update(UPDATE, entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName()) == 1) {
-            return new User(entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
+        if (jdbcTemplate.update(UPDATE, entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName(), entity.getId()) == 1) {
+            return new User(entity.getId(), entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
         } else {
-            throw new DaoException("Unable to update role with id=" + entity.getId());
+            throw new DaoException("Unable to update user with id=" + entity.getId());
         }
     }
 
     @Override
     public Optional<User> findById(Long id) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, userMapper, id,id,id));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, userMapper, id));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -107,7 +103,7 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     @Override
     public Long findByLoginPassword(String login, String password) {
-       return jdbcTemplate.queryForObject(
+        return jdbcTemplate.queryForObject(
                 "select last_name from t_actor where id = ?",
                 Long.class, login, password);
     }

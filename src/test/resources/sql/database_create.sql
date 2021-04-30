@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS lesson_time;
+DROP TABLE IF EXISTS lesson_times;
 DROP TABLE IF EXISTS lesson_rooms;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS groups;
@@ -30,7 +30,7 @@ CREATE TABLE lesson_rooms
     lesson_room_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE lesson_time
+CREATE TABLE lesson_times
 (
     lesson_time_id SERIAL              NOT NULL PRIMARY KEY,
     lesson_start   TIME WITH TIME ZONE NOT NULL,
@@ -78,7 +78,6 @@ CREATE TABLE teacher_courses
 (
     teacher_id INT NOT NULL,
     course_id  INT NOT NULL,
-    PRIMARY KEY (teacher_id, course_id),
     FOREIGN KEY (teacher_id) REFERENCES users
         ON DELETE CASCADE
         ON UPDATE CASCADE,
@@ -110,17 +109,17 @@ CREATE TABLE students
 CREATE TABLE lessons
 (
     lesson_id      SERIAL NOT NULL PRIMARY KEY,
-    lesson_time_id INT    NOT NULL,
-    date           DATE   NOT NULL,
-    group_id       INT    NOT NULL,
     course_id      INT    NOT NULL,
+    group_id       INT    NOT NULL,
     teacher_id     INT    NOT NULL,
+    date           DATE   NOT NULL,
+    lesson_time_id INT    NOT NULL,
     lesson_room_id INT    NOT NULL,
-    FOREIGN KEY (lesson_time_id) REFERENCES lesson_time,
+    FOREIGN KEY (lesson_time_id) REFERENCES lesson_times,
     FOREIGN KEY (group_id) REFERENCES groups,
     FOREIGN KEY (course_id) REFERENCES courses,
     FOREIGN KEY (teacher_id) REFERENCES teachers,
-    FOREIGN KEY (lesson_room_id) REFERENCES lesson_time,
+    FOREIGN KEY (lesson_room_id) REFERENCES lesson_rooms,
     CONSTRAINT teacher_unique UNIQUE (teacher_id, lesson_time_id, date),
     CONSTRAINT groups_unique UNIQUE (group_id, lesson_time_id, date),
     CONSTRAINT lesson_rooms_unique UNIQUE (lesson_room_id, lesson_time_id, date)

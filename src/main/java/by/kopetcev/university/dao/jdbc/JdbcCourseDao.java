@@ -4,6 +4,7 @@ import by.kopetcev.university.dao.CourseDao;
 import by.kopetcev.university.dao.jdbc.mappers.CourseMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.Course;
+import by.kopetcev.university.model.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,11 +18,15 @@ import java.util.*;
 @Repository
 public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements CourseDao {
 
-    private static final String TABLE_NAME = "courses";
+    private static final String TABLE_COURSES = "courses";
 
-    private static final String COURSE_ID ="course_id";
+    private static final String TABLE_TEACHER_COURSE = "teacher_courses";
+
+    private static final String COURSE_ID = "course_id";
 
     private static final String COURSE_NAME = "course_name";
+
+    private static final String TEACHER_ID = "teacher_id";
 
     private static final String UPDATE = "UPDATE courses SET course_name=? WHERE course_id =?";
 
@@ -31,15 +36,23 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
 
     private static final String DELETE_BY_ID = "DELETE FROM courses WHERE course_id =?";
 
+    private static final String DELETE_BY_ID_FROM_TEACHER = "DELETE FROM teacher_courses WHERE course_id =? AND teacher_id = ?";
+
+    private static final String FIND_BY_TEACHER_ID = "SELECT courses.course_id, course_name FROM courses,teacher_courses where courses.course_id = teacher_courses.course_id AND teacher_courses.teacher_id = ?";
+
     private final CourseMapper courseMapper;
 
     private final SimpleJdbcInsert courseInsert;
+
+    private final SimpleJdbcInsert teacherCourseInsert;
+
 
     @Autowired
     protected JdbcCourseDao(DataSource dataSource, CourseMapper courseMapper) {
         super(dataSource);
         this.courseMapper = courseMapper;
-        this.courseInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(COURSE_ID);
+        this.courseInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_COURSES).usingGeneratedKeyColumns(COURSE_ID);
+        this.teacherCourseInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_TEACHER_COURSE);
     }
 
     @Override
@@ -48,7 +61,6 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
             Map<String, Object> params = new HashMap<>();
             params.put(COURSE_NAME, entity.getName());
             Number id = courseInsert.executeAndReturnKey(params);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!"+id);
             return new Course(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
             throw new DaoException("Unable to create a new course", e);
@@ -79,7 +91,34 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean  deleteById(Long id) {
         return jdbcTemplate.update(DELETE_BY_ID, id) == 1;
     }
+
+    @Override
+    public boolean assignTeacher(Course course, Teacher teacher) {
+        Map<String, Object> params = new HashMap<>();
+        params.put(COURSE_ID, course.getId());
+        params.put(TEACHER_ID, teacher.getId());
+        if (teacherCourseInsert.execute(params) == 1) {
+            return true;
+        } else {
+            throw new DaoException("Unable to assign course with id = " + course.getId() + " to teacher with id = " + teacher.getId());
+
+        }
+    }
+
+    @Override
+    public List<Course> findByTeacherId(Long TeacherId) {
+        return jdbcTemplate.query(FIND_BY_TEACHER_ID, courseMapper, TeacherId);
+    }
+
+    @Override
+    public boolean  deleteByIdFromTeacher(Long courseId, Long teacherId) {
+        return jdbcTemplate.update(DELETE_BY_ID_FROM_TEACHER, courseId, teacherId ) == 1;
+    }
+
 }
+
+
+

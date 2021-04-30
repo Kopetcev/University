@@ -48,13 +48,41 @@ public class LessonTime implements Entity<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LessonTime that = (LessonTime) o;
-        return id == that.id &&
-                Objects.equals(start, that.start) &&
-                Objects.equals(end, that.end);
+        if(null==id){
+            return (id==that.id);
+        }else {
+            if(!id.equals(that.id)){
+                return false;
+            }
+        }
+        if(null==start){
+            return (start==that.start);
+        }else {
+            if(!start.equals(that.start)){
+                return false;
+            }
+        }
+        if(null==id){
+            return (end==that.end);
+        }else {
+            if(!end.equals(that.end)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, start, end);
+    }
+
+    @Override
+    public String toString() {
+        return "LessonTime{" +
+                "id=" + id +
+                ", start=" + start +
+                ", end=" + end +
+                '}';
     }
 }

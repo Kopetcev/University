@@ -3,7 +3,10 @@ package by.kopetcev.university.dao.jdbc;
 import java.util.List;
 import java.util.Optional;
 
+import by.kopetcev.university.model.Course;
 import by.kopetcev.university.model.Role;
+import by.kopetcev.university.model.Teacher;
+import by.kopetcev.university.model.User;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,9 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @ContextConfiguration(classes = JdbcRoleDaoTestConfig.class)
 @SpringJUnitConfig
-@Sql("/sql/database_create.sql")
-@Sql("/sql/insert_JdbcRoleDaoTest.sql")
-//@Sql("/sql/database_cleanup.sql")
+@Sql({"/sql/database_create.sql", "/sql/insert_JdbcRoleDaoTest.sql"})
 public class JdbcRoleDaoTest {
 
     @Autowired
@@ -28,7 +29,7 @@ public class JdbcRoleDaoTest {
 
     @Test
     void shouldCreate()  {
-        Role expected = new Role("created course");
+        Role expected = new Role("created role");
         assertThat(expected.getId(), nullValue());
 
         Role created = dao.create(expected);
@@ -84,5 +85,32 @@ public class JdbcRoleDaoTest {
         long id = 12345L;
         assertThat(dao.findById(id).isPresent(), is(false));
         assertThat(dao.deleteById(id), is(false));
+    }
+
+    @Test
+    void shouldFindByTeacherId() {
+        Long userId = 1L;
+        List<Role> roles = dao.findByUserId(userId);
+        assertThat(roles, hasItems(new Role(1L, "manager"),
+                new Role(2L, "intern"),
+                new Role(3L, "admin")));
+    }
+
+
+    @Test
+    void shouldAssignCourseToTeacher() {
+        Role role = new Role(7L, "assign_me");
+        User user = new User(2L, "q", "password0", "q3@mail", "Giovanna", "Garcia");
+        dao.assignUser(role, user);
+        assertThat(dao.findByUserId(user.getId()).get(0), equalTo(role));
+    }
+
+    @Test
+    void shouldDeleteFromTeacher() {
+        Long roleId = 8L;
+        Long userId = 3L;
+        assertThat(dao.findByUserId(userId), hasSize(1));
+        assertThat(dao.deleteByIdFromUser(roleId,userId), is(true));
+        assertThat(dao.findByUserId(userId), hasSize(0));
     }
 }

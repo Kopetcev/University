@@ -23,17 +23,17 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
 
     private static final String LESSON_TIME_ID ="lesson_time_id";
 
-    private static final String LESSON_TIME_START = "lesson_time_start";
+    private static final String LESSON_TIME_START = "lesson_start";
 
-    private static final String LESSON_TIME_END = "lesson_time_end";
+    private static final String LESSON_TIME_END = "lesson_end";
 
-    private static final String UPDATE = "UPDATE lesson_times SET lesson_room_name=? WHERE lesson_room_id =?";
+    private static final String UPDATE = "UPDATE lesson_times SET lesson_start=? , lesson_end = ? WHERE lesson_time_id =?";
 
-    private static final String FIND_ALL = "SELECT lesson_time_id, lesson_time_start, lesson_time_end  FROM lesson_times";
+    private static final String FIND_ALL = "SELECT lesson_time_id, lesson_start, lesson_end  FROM lesson_times";
 
-    private static final String FIND_BY_ID = "SELECT lesson_time_id, lesson_time_start, lesson_time_end FROM lesson_times WHERE lesson_time_id = ?";
+    private static final String FIND_BY_ID = "SELECT lesson_time_id, lesson_start, lesson_end FROM lesson_times WHERE lesson_time_id = ?";
 
-    private static final String DELETE_BY_ID = "DELETE FROM lesson_times WHERE lesson_room_id =?";
+    private static final String DELETE_BY_ID = "DELETE FROM lesson_times WHERE lesson_time_id =?";
 
     private final LessonTimeMapper lessonTimeMapper;
 

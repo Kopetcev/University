@@ -45,4 +45,12 @@ public class LessonRoom implements Entity<Long> {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+
+    @Override
+    public String toString() {
+        return "LessonRoom{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
