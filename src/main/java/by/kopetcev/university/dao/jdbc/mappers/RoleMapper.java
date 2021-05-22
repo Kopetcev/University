@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class RoleMapper implements RowMapper<Role> {
 
     public static final String ROLE_ID = "role_id";
-    
+
     public static final String ROLE_NAME = "role_name";
 
     @Override

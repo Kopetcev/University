@@ -21,7 +21,7 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
 
     private static final String TABLE_NAME = "groups";
 
-    private static final String GROUP_ID ="group_id";
+    private static final String GROUP_ID = "group_id";
 
     private static final String GROUP_NAME = "group_name";
 

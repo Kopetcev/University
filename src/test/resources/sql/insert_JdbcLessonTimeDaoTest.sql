@@ -1,5 +1,5 @@
-INSERT INTO lesson_times (lesson_start,lesson_end)
-VALUES ('8:00','9:00'),
+INSERT INTO lesson_times (lesson_start, lesson_end)
+VALUES ('8:00', '9:00'),
        ('9:00', '10:00'),
        ('10:00', '11:00'),
        ('11:00', '12:00'),

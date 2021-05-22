@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RoleMapperTest{
+public class RoleMapperTest {
 
     private static final int rowNum = 1;
 
@@ -25,15 +25,13 @@ public class RoleMapperTest{
 
     @Test
     void shouldThrowExceptionOnNull() {
-        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null,rowNum));
+        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null, rowNum));
     }
 
     @Test
     void shouldReturnRole() throws SQLException {
         when(resultSetMock.getLong("role_id")).thenReturn(1L);
         when(resultSetMock.getString("role_name")).thenReturn("TestName");
-        assertEquals(new Role(1L, "TestName"), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new Role(1L, "TestName"), mapperTest.mapRow(resultSetMock, rowNum));
     }
 }
-
-

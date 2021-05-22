@@ -77,45 +77,45 @@ public class User implements Entity<Long> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        if(null==id){
-            return (id==user.id);
-        }else {
-            if(!id.equals(user.id)){
+        if (null == id) {
+            return (id == user.id);
+        } else {
+            if (!id.equals(user.id)) {
                 return false;
             }
         }
-        if(null==login){
-            return (login==user.login);
-        }else {
-            if(!login.equals(user.login)){
+        if (null == login) {
+            return (login == user.login);
+        } else {
+            if (!login.equals(user.login)) {
                 return false;
             }
         }
-        if(null==password){
-            return (password==user.password);
-        }else {
-            if(!password.equals(user.password)){
+        if (null == password) {
+            return (password == user.password);
+        } else {
+            if (!password.equals(user.password)) {
                 return false;
             }
         }
-        if(null==email){
-            return (email==user.email);
-        }else {
-            if(!email.equals(user.email)){
+        if (null == email) {
+            return (email == user.email);
+        } else {
+            if (!email.equals(user.email)) {
                 return false;
             }
         }
-        if(null==firstName){
-            return (firstName==user.firstName);
-        }else {
-            if(!firstName.equals(user.firstName)){
+        if (null == firstName) {
+            return (firstName == user.firstName);
+        } else {
+            if (!firstName.equals(user.firstName)) {
                 return false;
             }
         }
-        if(null==lastName){
-            return (lastName==user.lastName);
-        }else {
-            if(!lastName.equals(user.lastName)){
+        if (null == lastName) {
+            return (lastName == user.lastName);
+        } else {
+            if (!lastName.equals(user.lastName)) {
                 return false;
             }
         }
@@ -140,4 +140,3 @@ public class User implements Entity<Long> {
                 '}';
     }
 }
-

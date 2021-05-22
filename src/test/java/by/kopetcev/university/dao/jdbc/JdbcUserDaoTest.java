@@ -1,29 +1,30 @@
 package by.kopetcev.university.dao.jdbc;
 
+import by.kopetcev.university.model.Student;
+import by.kopetcev.university.model.Teacher;
+import by.kopetcev.university.model.User;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
+
 import java.util.List;
 import java.util.Optional;
 
-import by.kopetcev.university.model.User;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-@ContextConfiguration(classes = JdbcUserDaoTestConfig.class)
-@SpringJUnitConfig
-@Sql({"/sql/database_create.sql", "/sql/insert_JdbcUserDaoTest.sql"})
-class JdbcUserDaoTest {
+@Sql(scripts = {"/sql/insert_JdbcUserDaoTest.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/cleanup.sql"}, executionPhase = AFTER_TEST_METHOD)
+@SpringBootTest
+class JdbcUserDaoTest extends BaseDaoTest {
 
     @Autowired
     private JdbcUserDao dao;
 
     @Test
-    void shouldCreate()  {
+    void shouldCreate() {
         User expected = new User("created", "password", "creat@mail.com", "Tom", "Garcia");
         assertThat(expected.getId(), nullValue());
 
@@ -50,7 +51,7 @@ class JdbcUserDaoTest {
     }
 
     @Test
-    void shouldNotFindOneNotExistent() {
+    void shouldNotFindOneNotExist() {
         Optional<User> found = dao.findById(1000L);
         assertThat(found.isPresent(), is(false));
     }
@@ -85,5 +86,65 @@ class JdbcUserDaoTest {
         long id = 12345L;
         assertThat(dao.findById(id).isPresent(), is(false));
         assertThat(dao.deleteById(id), is(false));
+    }
+
+    @Test
+    void shouldFindStudent() {
+        Optional<User> found = dao.findById(7L);
+        assertThat(found.isPresent(), is(true));
+        assertThat((Student)found.get(), equalTo(new Student(7L, "student", "password6", "student@mail", "Alex", "Taylor",1L)));
+    }
+
+    @Test
+    void shouldFindTeacher() {
+        Optional<User> found = dao.findById(8L);
+        assertThat(found.isPresent(), is(true));
+        assertThat((Teacher)found.get(), equalTo(new Teacher(8L, "teacher", "password7", "teach@mail", "Aaron", "Sanders")));
+    }
+
+    @Test
+    void shouldAssignStudent() {
+        User user = new User(3L, "e", "password2", "e3@mail", "Kelly", "Hall");
+        Long groupId = 2L;
+        Student student = new Student(3L, "e", "password2", "e3@mail", "Kelly", "Hall",groupId);
+        assertThat(dao.findAllStudent(), not(hasItems(student)));
+        dao.assignStudent(user.getId(), groupId);
+        assertThat(dao.findAllStudent(), hasItems(student));
+    }
+
+    @Test
+    void shouldAssignTeacher() {
+        User user = new User(2L,"w", "password1", "w3@mail", "Francine", "Parker");
+        Teacher teacher = new Teacher(2L,"w", "password1", "w3@mail", "Francine", "Parker");
+               assertThat(dao.findAllTeacher(), not(hasItems(teacher)));
+        dao.assignTeacher(user.getId());
+        assertThat(dao.findAllTeacher(), hasItems(teacher));
+    }
+
+    @Test
+    void shouldFindAllStudent() {
+        List<User> all = dao.findAllStudent();
+        assertThat(all,  containsInAnyOrder(new Student(7L, "student", "password6", "student@mail", "Alex", "Taylor",1L),
+                new Student(10L, "student2", "password7", "student2@mail", "Lola", "Garcia",2L)));
+    }
+
+    @Test
+    void shouldFindAllTeacher() {
+        List<User> all = dao.findAllTeacher();
+        assertThat(all,  containsInAnyOrder(new Teacher(8L, "teacher", "password7", "teach@mail", "Aaron", "Sanders"),
+                new Teacher(11L, "teacher2", "password11", "teach2@mail", "Kelly", "Rodriguez")));
+    }
+
+    @Test
+    void shouldFindOneByLoginPassword() {
+        Optional<User> found = dao.findByLoginPassword("find_me", "password3");
+        assertThat(found.isPresent(), is(true));
+        assertThat(found.get(), equalTo(new User(4L, "find_me", "password3", "r3@mail", "Dulce", "Barnes")));
+    }
+
+    @Test
+    void shouldNotFindOneByLoginPasswordNotExistent() {
+        Optional<User> found = dao.findByLoginPassword("not exist", "password");
+        assertThat(found.isPresent(), is(false));
     }
 }

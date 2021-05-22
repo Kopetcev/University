@@ -27,7 +27,7 @@ public class LessonMapper implements RowMapper<Lesson> {
     @Override
     public Lesson mapRow(ResultSet resultSet, int i) throws SQLException {
         try {
-            return new Lesson(resultSet.getLong(LESSON_ID), resultSet.getLong(COURSE_ID),resultSet.getLong(GROUP_ID),
+            return new Lesson(resultSet.getLong(LESSON_ID), resultSet.getLong(COURSE_ID), resultSet.getLong(GROUP_ID),
                     resultSet.getLong(TEACHER_ID), resultSet.getDate(DATE).toLocalDate(), resultSet.getLong(LESSON_TIME_ID), resultSet.getLong(LESSON_ROOM_ID));
 
         } catch (Exception e) {

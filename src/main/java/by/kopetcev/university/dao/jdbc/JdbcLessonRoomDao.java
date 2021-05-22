@@ -8,18 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> implements LessonRoomDao {
 
     private static final String TABLE_NAME = "lesson_rooms";
 
-    private static final String LESSON_ROOM_ID ="lesson_room_id";
+    private static final String LESSON_ROOM_ID = "lesson_room_id";
 
     private static final String LESSON_ROOM_NAME = "lesson_room_name";
 

@@ -1,0 +1,4 @@
+datasource:
+  url: ${UNIVERSITY.DB.URL}
+  username: ${UNIVERSITY.DB.USERNAME}
+  password: ${UNIVERSITY.DB.PASSWORD}

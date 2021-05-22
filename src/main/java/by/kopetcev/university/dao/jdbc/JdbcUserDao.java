@@ -3,6 +3,8 @@ package by.kopetcev.university.dao.jdbc;
 import by.kopetcev.university.dao.UserDao;
 import by.kopetcev.university.dao.jdbc.mappers.UserMapper;
 import by.kopetcev.university.exception.DaoException;
+import by.kopetcev.university.model.Student;
+import by.kopetcev.university.model.Teacher;
 import by.kopetcev.university.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,9 +21,13 @@ import java.util.Optional;
 @Repository
 public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao {
 
-    private static final String TABLE_NAME = "users";
-
     public static final String USER_ID = "user_id";
+
+    public static final String STUDENT_ID = "student_user_id";
+
+    public static final String TEACHER_ID = "teacher_user_id";
+
+    public static final String GROUP_ID = "group_id";
 
     public static final String USER_LOGIN = "login";
 
@@ -33,28 +39,59 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     public static final String USER_LAST_NAME = "last_name";
 
+    private static final String TABLE_NAME_USERS = "users";
+
+    private static final String TABLE_NAME_STUDENT = "students";
+
+    private static final String TABLE_NAME_TEACHER = "teachers";
+
     private static final String UPDATE = "UPDATE users SET login=?, password=?, email=?, first_name=?, last_name=?  WHERE user_id =?";
 
     private static final String FIND_ALL = "SELECT * FROM users u " +
             "LEFT JOIN students st ON u.user_id = st.student_user_id " +
-            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id ";
+            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id";
 
     private static final String FIND_BY_ID = "SELECT * FROM users u " +
             "LEFT JOIN students st ON u.user_id = st.student_user_id " +
-            "LEFT JOIN teachers ON u.user_id = teachers.teacher_user_id " +
+            "LEFT JOIN teachers th ON u.user_id = th.teacher_user_id " +
             "WHERE u.user_id=?";
 
+    private static final String FIND_ALL_STUDENTS = "SELECT * FROM users u " +
+            "LEFT JOIN students st ON u.user_id = st.student_user_id " +
+            "LEFT JOIN teachers th ON u.user_id = th.teacher_user_id " +
+            "WHERE u.user_id=st.student_user_id";
+
+    private static final String FIND_ALL_TEACHER = "SELECT * FROM users u " +
+            "LEFT JOIN students st ON u.user_id = st.student_user_id " +
+            "LEFT JOIN teachers th ON u.user_id = th.teacher_user_id " +
+            "WHERE u.user_id=th.teacher_user_id";
+
+    private static final String FIND_BY_LOGIN_PASSWORD = "SELECT * FROM users u " +
+            "LEFT JOIN students st ON u.user_id = st.student_user_id " +
+            "LEFT JOIN teachers th ON u.user_id = th.teacher_user_id " +
+            "WHERE u.login = ? AND u.password = ?";
+
     private static final String DELETE_BY_ID = "DELETE FROM users WHERE user_id =?";
+
+    private static final String DELETE_FROM_STUDENT_BY_ID = "DELETE FROM students WHERE student_user_id =?";
+
+    private static final String DELETE_FROM_TEACHER_BY_ID = "DELETE FROM teachers WHERE teacher_user_id =?";
 
     private final UserMapper userMapper;
 
     private final SimpleJdbcInsert userInsert;
 
+    private final SimpleJdbcInsert studentInsert;
+
+    private final SimpleJdbcInsert teacherInsert;
+
     @Autowired
     protected JdbcUserDao(DataSource dataSource, UserMapper userMapper) {
         super(dataSource);
         this.userMapper = userMapper;
-        this.userInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME).usingGeneratedKeyColumns(USER_ID);
+        this.userInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME_USERS).usingGeneratedKeyColumns(USER_ID);
+        this.studentInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME_STUDENT);
+        this.teacherInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName(TABLE_NAME_TEACHER);
     }
 
     @Override
@@ -102,10 +139,57 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
     }
 
     @Override
-    public Long findByLoginPassword(String login, String password) {
-        return jdbcTemplate.queryForObject(
-                "select last_name from t_actor where id = ?",
-                Long.class, login, password);
+    public Optional<User> findByLoginPassword(String login, String password) {
+    try {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_LOGIN_PASSWORD, userMapper, login, password));
+    } catch (EmptyResultDataAccessException e) {
+        return Optional.empty();
     }
 }
 
+    @Override
+    public boolean assignStudent(Long userId, Long groupId) {
+        Map<String, Object> params = new HashMap<>();
+                params.put(STUDENT_ID, userId);
+                params.put(GROUP_ID, groupId);
+        if (studentInsert.execute(params) == 1) {
+            return true;
+        } else {
+            throw new DaoException("Unable to assign student to user with id = " + userId);
+        }
+    }
+
+    @Override
+    public boolean assignTeacher(Long userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put(TEACHER_ID, userId);
+        if (teacherInsert.execute(params) == 1) {
+            return true;
+        } else {
+            throw new DaoException("Unable to assign teacher to user with id = " + userId);
+        }
+    }
+
+    @Override
+    public boolean deleteFromTeacher(Long teacherId) {
+        return jdbcTemplate.update(DELETE_FROM_TEACHER_BY_ID, teacherId) == 1;
+    }
+
+    @Override
+    public boolean deleteFromStudent(Long studentId) {
+        return jdbcTemplate.update(DELETE_FROM_STUDENT_BY_ID, studentId) == 1;
+    }
+
+    @Override
+    public List<User> findAllTeacher() {
+        return jdbcTemplate.query(FIND_ALL_TEACHER, userMapper);
+    }
+
+    @Override
+    public List<User> findAllStudent() {
+        return jdbcTemplate.query(FIND_ALL_STUDENTS, userMapper);
+    }
+
+
+
+}

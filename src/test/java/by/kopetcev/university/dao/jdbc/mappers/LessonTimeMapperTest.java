@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class LessonTimeMapperTest{
+class LessonTimeMapperTest {
     private static final int rowNum = 1;
 
     @Mock
@@ -26,14 +26,14 @@ class LessonTimeMapperTest{
 
     @Test
     void shouldThrowExceptionOnNull() {
-        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null,rowNum));
+        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null, rowNum));
     }
 
     @Test
     void shouldReturnLessonTime() throws SQLException {
         when(resultSetMock.getLong("lesson_time_id")).thenReturn(1L);
-        when(resultSetMock.getTime("lesson_start")).thenReturn(new Time(9,0,0));
-        when(resultSetMock.getTime("lesson_end")).thenReturn(new Time(10,0,0));
-        assertEquals(new LessonTime(1L, LocalTime.of(9,0), LocalTime.of(10,0)), mapperTest.mapRow(resultSetMock,rowNum));
+        when(resultSetMock.getTime("lesson_start")).thenReturn(new Time(9, 0, 0));
+        when(resultSetMock.getTime("lesson_end")).thenReturn(new Time(10, 0, 0));
+        assertEquals(new LessonTime(1L, LocalTime.of(9, 0), LocalTime.of(10, 0)), mapperTest.mapRow(resultSetMock, rowNum));
     }
 }

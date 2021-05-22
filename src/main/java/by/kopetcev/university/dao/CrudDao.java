@@ -12,5 +12,4 @@ public interface CrudDao<T, K> {
     List<T> findAll();
 
     boolean deleteById(K id);
-
 }

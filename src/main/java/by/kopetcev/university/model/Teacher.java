@@ -11,6 +11,18 @@ public class Teacher extends User {
         super(id, login, password, email, firstName, lastName);
 
     }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id=" + super.getId() +
+                ", login='" + super.getLogin() + '\'' +
+                ", password='" + super.getPassword() + '\'' +
+                ", email='" + super.getEmail() + '\'' +
+                ", firstName='" + super.getFirstName() + '\'' +
+                ", lastName='" + super.getLastName() + '\'' +
+                '}';
+    }
 }
 
 

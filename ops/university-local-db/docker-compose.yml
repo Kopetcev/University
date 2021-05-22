@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+
+  management_db:
+    image: postgres
+    restart: always
+    ports:
+      - 5999:5432
+    environment:
+      POSTGRES_DB: university
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 921

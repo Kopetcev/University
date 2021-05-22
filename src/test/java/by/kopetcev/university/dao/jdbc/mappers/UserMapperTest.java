@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserMapperTest{
+class UserMapperTest {
     private static final int rowNum = 1;
 
     @Mock
@@ -26,7 +26,7 @@ class UserMapperTest{
 
     @Test
     void shouldThrowExceptionOnNull() {
-        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null,rowNum));
+        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null, rowNum));
     }
 
     @Test
@@ -39,7 +39,7 @@ class UserMapperTest{
         when(resultSetMock.getString("last_name")).thenReturn("TestLastName");
         when(resultSetMock.getLong("teacher_user_id")).thenReturn(2L);
         when(resultSetMock.getLong("student_user_id")).thenReturn(2L);
-        assertEquals(new User(1L, "TestLogin", "TestPassword", "TestEmail@mail.com", "TestName", "TestLastName"), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new User(1L, "TestLogin", "TestPassword", "TestEmail@mail.com", "TestName", "TestLastName"), mapperTest.mapRow(resultSetMock, rowNum));
     }
 
     @Test
@@ -52,7 +52,7 @@ class UserMapperTest{
         when(resultSetMock.getString("last_name")).thenReturn("TestLastName");
         when(resultSetMock.getLong("student_user_id")).thenReturn(1L);
         when(resultSetMock.getLong("group_id")).thenReturn(1L);
-        assertEquals(new Student(1L, "TestLogin", "TestPassword", "TestEmail@mail.com", "TestName", "TestLastName", 1L), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new Student(1L, "TestLogin", "TestPassword", "TestEmail@mail.com", "TestName", "TestLastName", 1L), mapperTest.mapRow(resultSetMock, rowNum));
     }
 
     @Test
@@ -65,9 +65,6 @@ class UserMapperTest{
         when(resultSetMock.getString("last_name")).thenReturn("TestLastName");
         when(resultSetMock.getLong("teacher_user_id")).thenReturn(1L);
         when(resultSetMock.getLong("student_user_id")).thenReturn(2L);
-        assertEquals(new Teacher(1L, "TestLogin", "TestPassword", "TestEmail@mail.com", "TestName", "TestLastName"), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new Teacher(1L, "TestLogin", "TestPassword", "TestEmail@mail.com", "TestName", "TestLastName"), mapperTest.mapRow(resultSetMock, rowNum));
     }
-
-
-
 }

@@ -39,24 +39,6 @@ CREATE TABLE users
     last_name  varchar(255)        NOT NULL
 );
 
-CREATE TABLE teachers
-(
-    teacher_user_id INT NOT NULL PRIMARY KEY,
-    FOREIGN KEY (teacher_user_id) REFERENCES users
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
-CREATE TABLE students
-(
-    student_user_id  INT UNIQUE NOT NULL PRIMARY KEY,
-    group_id INT,
-    FOREIGN KEY (student_user_id) REFERENCES users,
-    FOREIGN KEY (group_id) REFERENCES groups
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
-);
-
 CREATE TABLE user_roles
 (
     user_id INT NOT NULL,
@@ -70,28 +52,45 @@ CREATE TABLE user_roles
         ON UPDATE CASCADE
 );
 
+CREATE TABLE teachers
+(
+    teacher_user_id INT NOT NULL PRIMARY KEY,
+    FOREIGN KEY (teacher_user_id) REFERENCES users
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
 CREATE TABLE teacher_courses
 (
     teacher_id INT NOT NULL,
-    course_id INT NOT NULL,
-    PRIMARY KEY (teacher_id, course_id),
+    course_id  INT NOT NULL,
     FOREIGN KEY (teacher_id) REFERENCES users
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     FOREIGN KEY (course_id) REFERENCES courses
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-        CONSTRAINT teachers_courses_unique UNIQUE (teacher_id,course_id)
+    CONSTRAINT teachers_courses_unique UNIQUE (teacher_id, course_id)
+);
+
+CREATE TABLE students
+(
+    student_user_id INT UNIQUE NOT NULL PRIMARY KEY,
+    group_id        INT,
+    FOREIGN KEY (student_user_id) REFERENCES users,
+    FOREIGN KEY (group_id) REFERENCES groups
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE lessons
 (
     lesson_id      SERIAL NOT NULL PRIMARY KEY,
-    lesson_time_id INT    NOT NULL,
-    date           DATE   NOT NULL,
-    group_id       INT    NOT NULL,
     course_id      INT    NOT NULL,
+    group_id       INT    NOT NULL,
     teacher_id     INT    NOT NULL,
+    date           DATE   NOT NULL,
+    lesson_time_id INT    NOT NULL,
     lesson_room_id INT    NOT NULL,
     FOREIGN KEY (lesson_time_id) REFERENCES lesson_times,
     FOREIGN KEY (group_id) REFERENCES groups,

@@ -3,7 +3,6 @@ package by.kopetcev.university.dao.jdbc;
 import by.kopetcev.university.dao.RoleDao;
 import by.kopetcev.university.dao.jdbc.mappers.RoleMapper;
 import by.kopetcev.university.exception.DaoException;
-
 import by.kopetcev.university.model.Role;
 import by.kopetcev.university.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,9 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
 
     private static final String TABLE_NAME_USER_ROLES = "user_roles";
 
-    private static final String ROLE_ID ="role_id";
+    private static final String ROLE_ID = "role_id";
 
-    private static final String USER_ID ="user_id";
+    private static final String USER_ID = "user_id";
 
     private static final String ROLE_NAME = "role_name";
 
@@ -99,14 +98,14 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
     }
 
     @Override
-    public boolean assignUser(Role role, User user) {
+    public boolean assignUser(Long roleId, Long userId) {
         Map<String, Object> params = new HashMap<>();
-        params.put(ROLE_ID, role.getId());
-        params.put(USER_ID, user.getId());
+        params.put(ROLE_ID, roleId);
+        params.put(USER_ID, userId);
         if (userRoleInsert.execute(params) == 1) {
             return true;
         } else {
-            throw new DaoException("Unable to assign role with id = " + role.getId() + " to user with id = " + user.getId());
+            throw new DaoException("Unable to assign role with id = " + roleId + " to user with id = " + userId);
 
         }
     }
@@ -118,6 +117,6 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
 
     @Override
     public boolean deleteByIdFromUser(Long roleId, Long userId) {
-        return jdbcTemplate.update(DELETE_BY_ID_FROM_USER, roleId, userId ) == 1;
+        return jdbcTemplate.update(DELETE_BY_ID_FROM_USER, roleId, userId) == 1;
     }
 }

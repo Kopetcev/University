@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface CourseDao extends CrudDao<Course, Long> {
 
-    boolean assignTeacher(Course course, Teacher teacher);
+    boolean assignTeacher(Long CourseId, Long teacherId);
 
     List<Course> findByTeacherId(Long teacherId);
 
-    boolean  deleteByIdFromTeacher(Long courseId, Long teacherId);
+    boolean deleteByIdFromTeacher(Long courseId, Long teacherId);
 }

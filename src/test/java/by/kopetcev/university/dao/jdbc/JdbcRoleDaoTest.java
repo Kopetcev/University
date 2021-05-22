@@ -1,34 +1,30 @@
 package by.kopetcev.university.dao.jdbc;
+import by.kopetcev.university.model.Role;
+import by.kopetcev.university.model.User;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Optional;
 
-import by.kopetcev.university.model.Course;
-import by.kopetcev.university.model.Role;
-import by.kopetcev.university.model.Teacher;
-import by.kopetcev.university.model.User;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 
-
-@ContextConfiguration(classes = JdbcRoleDaoTestConfig.class)
-@SpringJUnitConfig
-@Sql({"/sql/database_create.sql", "/sql/insert_JdbcRoleDaoTest.sql"})
-class JdbcRoleDaoTest {
+@SpringBootTest
+@Sql(scripts = {"/sql/insert_JdbcRoleDaoTest.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/cleanup.sql",}, executionPhase = AFTER_TEST_METHOD)
+class JdbcRoleDaoTest extends BaseDaoTest {
 
     @Autowired
     private JdbcRoleDao dao;
 
     @Test
-    void shouldCreate()  {
+    void shouldCreate() {
         Role expected = new Role("created role");
         assertThat(expected.getId(), nullValue());
 
@@ -101,7 +97,7 @@ class JdbcRoleDaoTest {
     void shouldAssignCourseToTeacher() {
         Role role = new Role(7L, "assign_me");
         User user = new User(2L, "q", "password0", "q3@mail", "Giovanna", "Garcia");
-        dao.assignUser(role, user);
+        dao.assignUser(role.getId(), user.getId());
         assertThat(dao.findByUserId(user.getId()).get(0), equalTo(role));
     }
 
@@ -110,7 +106,7 @@ class JdbcRoleDaoTest {
         Long roleId = 8L;
         Long userId = 3L;
         assertThat(dao.findByUserId(userId), hasSize(1));
-        assertThat(dao.deleteByIdFromUser(roleId,userId), is(true));
+        assertThat(dao.deleteByIdFromUser(roleId, userId), is(true));
         assertThat(dao.findByUserId(userId), hasSize(0));
     }
 }

@@ -5,4 +5,3 @@ VALUES ('1-G'),
        ('find me'),
        ('delete_me'),
        ('update_me');
-

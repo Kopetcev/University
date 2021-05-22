@@ -3,9 +3,8 @@ package by.kopetcev.university.dao.jdbc;
 import by.kopetcev.university.model.Lesson;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,12 +12,13 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.is;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
-@ContextConfiguration(classes = JdbcLessonDaoTestConfig.class)
-@SpringJUnitConfig
-@Sql({"/sql/database_create.sql", "/sql/insert_JdbcLessonDaoTest.sql"})
-class JdbcLessonDaoTest {
+@SpringBootTest
+@Sql(scripts = {"/sql/insert_JdbcLessonDaoTest.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/cleanup.sql"}, executionPhase = AFTER_TEST_METHOD)
+class JdbcLessonDaoTest extends BaseDaoTest {
 
     @Autowired
     private JdbcLessonDao dao;
@@ -86,5 +86,4 @@ class JdbcLessonDaoTest {
         assertThat(dao.findById(id).isPresent(), is(false));
         assertThat(dao.deleteById(id), is(false));
     }
-
 }

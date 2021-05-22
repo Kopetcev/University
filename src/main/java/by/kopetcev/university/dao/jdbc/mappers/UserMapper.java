@@ -25,7 +25,7 @@ public class UserMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet resultSet, int i) throws SQLException {
         try {
-            if(resultSet.getLong(STUDENT_ID)==resultSet.getLong(USER_ID)){
+            if (resultSet.getLong(STUDENT_ID) == resultSet.getLong(USER_ID)) {
                 return new Student(resultSet.getLong(USER_ID),
                         resultSet.getString(USER_LOGIN),
                         resultSet.getString(USER_PASSWORD),
@@ -34,8 +34,8 @@ public class UserMapper implements RowMapper<User> {
                         resultSet.getString(USER_LAST_NAME),
                         resultSet.getLong(GROUP_ID));
             }
-            if(resultSet.getLong(TEACHER_ID)==resultSet.getLong(USER_ID)){
-                 return new Teacher(resultSet.getLong(USER_ID),
+            if (resultSet.getLong(TEACHER_ID) == resultSet.getLong(USER_ID)) {
+                return new Teacher(resultSet.getLong(USER_ID),
                         resultSet.getString(USER_LOGIN),
                         resultSet.getString(USER_PASSWORD),
                         resultSet.getString(USER_EMAIL),

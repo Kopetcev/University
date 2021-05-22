@@ -1,29 +1,29 @@
 package by.kopetcev.university.dao.jdbc;
 
+import by.kopetcev.university.model.LessonRoom;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
+
 import java.util.List;
 import java.util.Optional;
 
-import by.kopetcev.university.model.LessonRoom;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-@ContextConfiguration(classes = JdbcLessonRoomDaoTestConfig.class)
-@SpringJUnitConfig
-@Sql({"/sql/database_create.sql", "/sql/insert_JdbcLessonRoomDaoTest.sql"})
-class JdbcLessonRoomDaoTest {
+@SpringBootTest
+@Sql(scripts = {"/sql/insert_JdbcLessonRoomDaoTest.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/cleanup.sql"}, executionPhase = AFTER_TEST_METHOD)
+class JdbcLessonRoomDaoTest extends BaseDaoTest {
 
     @Autowired
     private JdbcLessonRoomDao dao;
 
     @Test
-    void shouldCreate()  {
+    void shouldCreate() {
         LessonRoom expected = new LessonRoom("created lesson room");
         assertThat(expected.getId(), nullValue());
 

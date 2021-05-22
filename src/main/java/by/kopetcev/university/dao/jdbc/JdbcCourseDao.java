@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements CourseDao {
@@ -91,19 +94,19 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
     }
 
     @Override
-    public boolean  deleteById(Long id) {
+    public boolean deleteById(Long id) {
         return jdbcTemplate.update(DELETE_BY_ID, id) == 1;
     }
 
     @Override
-    public boolean assignTeacher(Course course, Teacher teacher) {
+    public boolean assignTeacher(Long courseId, Long teacherId) {
         Map<String, Object> params = new HashMap<>();
-        params.put(COURSE_ID, course.getId());
-        params.put(TEACHER_ID, teacher.getId());
+        params.put(COURSE_ID, courseId);
+        params.put(TEACHER_ID, teacherId);
         if (teacherCourseInsert.execute(params) == 1) {
             return true;
         } else {
-            throw new DaoException("Unable to assign course with id = " + course.getId() + " to teacher with id = " + teacher.getId());
+            throw new DaoException("Unable to assign course with id = " + courseId + " to teacher with id = " + teacherId);
 
         }
     }
@@ -114,11 +117,8 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
     }
 
     @Override
-    public boolean  deleteByIdFromTeacher(Long courseId, Long teacherId) {
-        return jdbcTemplate.update(DELETE_BY_ID_FROM_TEACHER, courseId, teacherId ) == 1;
+    public boolean deleteByIdFromTeacher(Long courseId, Long teacherId) {
+        return jdbcTemplate.update(DELETE_BY_ID_FROM_TEACHER, courseId, teacherId) == 1;
     }
 
 }
-
-
-

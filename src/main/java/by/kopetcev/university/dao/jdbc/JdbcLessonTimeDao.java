@@ -21,7 +21,7 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
 
     private static final String TABLE_NAME = "lesson_times";
 
-    private static final String LESSON_TIME_ID ="lesson_time_id";
+    private static final String LESSON_TIME_ID = "lesson_time_id";
 
     private static final String LESSON_TIME_START = "lesson_start";
 

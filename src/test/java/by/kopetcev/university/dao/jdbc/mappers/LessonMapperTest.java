@@ -11,7 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +27,7 @@ class LessonMapperTest {
 
     @Test
     void shouldThrowExceptionOnNull() {
-        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null,rowNum));
+        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null, rowNum));
     }
 
     @Test
@@ -35,9 +36,9 @@ class LessonMapperTest {
         when(resultSetMock.getLong("course_id")).thenReturn(1L);
         when(resultSetMock.getLong("group_id")).thenReturn(1L);
         when(resultSetMock.getLong("teacher_id")).thenReturn(1L);
-        when(resultSetMock.getDate("date")).thenReturn(new Date(120,0,1));
+        when(resultSetMock.getDate("date")).thenReturn(new Date(120, 0, 1));
         when(resultSetMock.getLong("lesson_time_id")).thenReturn(1L);
         when(resultSetMock.getLong("lesson_room_id")).thenReturn(1L);
-        assertEquals(new Lesson(1L, 1L, 1L, 1L,  LocalDate.of(2020, 1,1),1L, 1L), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new Lesson(1L, 1L, 1L, 1L, LocalDate.of(2020, 1, 1), 1L, 1L), mapperTest.mapRow(resultSetMock, rowNum));
     }
 }

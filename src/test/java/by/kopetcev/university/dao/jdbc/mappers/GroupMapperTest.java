@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GroupMapperTest{
+class GroupMapperTest {
 
     private static final int rowNum = 1;
 
@@ -25,13 +25,13 @@ class GroupMapperTest{
 
     @Test
     void shouldThrowExceptionOnNull() {
-        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null,rowNum));
+        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null, rowNum));
     }
 
     @Test
     void shouldReturnGroup() throws SQLException {
         when(resultSetMock.getLong("group_id")).thenReturn(1L);
         when(resultSetMock.getString("group_name")).thenReturn("TestName");
-        assertEquals(new Group(1L, "TestName"), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new Group(1L, "TestName"), mapperTest.mapRow(resultSetMock, rowNum));
     }
 }

@@ -1,26 +1,24 @@
 package by.kopetcev.university.dao.jdbc;
 
 import by.kopetcev.university.model.Course;
+import by.kopetcev.university.model.Teacher;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Optional;
 
-import by.kopetcev.university.model.Teacher;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-@ContextConfiguration(classes = JdbcCourseDaoTestConfig.class)
-@SpringJUnitConfig
-@Sql({"/sql/database_create.sql", "/sql/insert_JdbcCourseDaoTest.sql"})
-class JdbcCourseDaoTest {
+@SpringBootTest
+@Sql(scripts = {"/sql/insert_JdbcCourseDaoTest.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/sql/cleanup.sql",}, executionPhase = AFTER_TEST_METHOD)
+class JdbcCourseDaoTest extends BaseDaoTest {
 
     @Autowired
     private JdbcCourseDao dao;
@@ -99,7 +97,7 @@ class JdbcCourseDaoTest {
     void shouldAssignCourseToTeacher() {
         Course course = new Course(7L, "assign_me");
         Teacher teacher = new Teacher(2L, "q", "password0", "q3@mail", "Giovanna", "Garcia");
-        dao.assignTeacher(course, teacher);
+        dao.assignTeacher(course.getId(), teacher.getId());
         assertThat(dao.findByTeacherId(teacher.getId()).get(0), equalTo(course));
     }
 
@@ -108,12 +106,7 @@ class JdbcCourseDaoTest {
         Long courseId = 8L;
         Long teacherId = 2L;
         assertThat(dao.findByTeacherId(teacherId), hasSize(1));
-        assertThat(dao.deleteByIdFromTeacher(courseId,teacherId), is(true));
+        assertThat(dao.deleteByIdFromTeacher(courseId, teacherId), is(true));
         assertThat(dao.findByTeacherId(teacherId), hasSize(0));
     }
-
-
-
-
-
 }

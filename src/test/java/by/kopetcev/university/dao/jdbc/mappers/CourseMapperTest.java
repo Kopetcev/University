@@ -25,7 +25,7 @@ class CourseMapperTest {
 
     @Test
     void shouldThrowExceptionOnNull() {
-        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null,rowNum));
+        assertThrows(RuntimeException.class, () -> mapperTest.mapRow(null, rowNum));
     }
 
     @Test
@@ -33,7 +33,6 @@ class CourseMapperTest {
 
         when(resultSetMock.getLong("course_id")).thenReturn(1L);
         when(resultSetMock.getString("course_name")).thenReturn("TestName");
-        assertEquals(new Course(1L, "TestName"), mapperTest.mapRow(resultSetMock,rowNum));
+        assertEquals(new Course(1L, "TestName"), mapperTest.mapRow(resultSetMock, rowNum));
     }
-
 }
