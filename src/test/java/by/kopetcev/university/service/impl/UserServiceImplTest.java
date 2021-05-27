@@ -43,7 +43,7 @@ class UserServiceImplTest {
     void shouldInvokeFindById() {
         Optional<User> expected = Optional.of(new User(1L, "user", "password8", "user@mail", "Nick", "Bennett"));
         when(userDaoMock.findById(expected.get().getId())).thenReturn(expected);
-        assertThat(service.findById(expected.get().getId()), equalTo(expected));
+        assertThat(service.findById(expected.get().getId()), equalTo(expected.get()));
         Mockito.verify(userDaoMock, Mockito.times(1)).findById(expected.get().getId());
     }
 

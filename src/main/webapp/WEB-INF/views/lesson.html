@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   </head>
+<body>
+<div class="main">
+    <div class="h1-wrapper px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h2>Lesson</h2>
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+            <div class="container">
+                <div class="table-wrapper table-responsive">
+                    <table class="table schedule-table table-striped table-bordered">
+                        <tr>
+                            <td>Course name</td>
+                            <td th:text="${lesson.course.name}">course</td>
+
+                        </tr>
+                        <tr>
+                            <td>Teacher</td>
+                            <td th:text = "${lesson.teacher.firstName} + ' ' + ${lesson.teacher.lastName}">English</td>
+                        </tr>
+                        <tr>
+                            <td>Educational audience</td>
+                            <td th:text = "${lesson.lessonRoom.name}">Classroom</td>
+                        </tr>
+                        <tr>
+                            <td>Group</td>
+                            <td th:text = "${lesson.group.name}"></td>
+                        </tr>
+                        <tr>
+                            <td>Time</td>
+                            <td th:text = "${lesson.dayOfWeek} +' ' +${lesson.lessonTime.start} + '-' + ${lesson.lessonTime.end}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <button  type="button" class="btn btn-secondary btn-lg "><a href="/schedule" style="text-decoration: none; color: white">to schedule</a></button>
+    </div>
+</div>
+
+</body>
+</html>

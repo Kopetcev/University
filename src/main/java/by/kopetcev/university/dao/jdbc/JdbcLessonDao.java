@@ -4,6 +4,8 @@ import by.kopetcev.university.dao.LessonDao;
 import by.kopetcev.university.dao.jdbc.mappers.LessonMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.Lesson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,13 +31,13 @@ public class JdbcLessonDao extends AbstractCrudDao<Lesson, Long> implements Less
 
     private static final String TEACHER_ID = "teacher_id";
 
-    private static final String DATE = "date";
+    private static final String DAY_OF_WEEK_ID = "day_of_week_id";
 
     private static final String LESSON_TIME_ID = "lesson_time_id";
 
     private static final String LESSON_ROOM_ID = "lesson_room_id";
 
-    private static final String UPDATE = "UPDATE lessons SET course_id = ?, group_id = ?, teacher_id =?, date = ?, lesson_time_id = ?, lesson_room_id = ?    WHERE lesson_id =?";
+    private static final String UPDATE = "UPDATE lessons SET course_id = ?, group_id = ?, teacher_id =?, day_of_week_id = ?, lesson_time_id = ?, lesson_room_id = ?    WHERE lesson_id =?";
 
     private static final String FIND_ALL = "SELECT * FROM lessons";
 
@@ -46,6 +48,9 @@ public class JdbcLessonDao extends AbstractCrudDao<Lesson, Long> implements Less
     private final LessonMapper lessonMapper;
 
     private final SimpleJdbcInsert lessonInsert;
+
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcLessonDao.class);
 
     @Autowired
     protected JdbcLessonDao(DataSource dataSource, LessonMapper lessonMapper) {
@@ -61,21 +66,26 @@ public class JdbcLessonDao extends AbstractCrudDao<Lesson, Long> implements Less
             params.put(COURSE_ID, entity.getCourseId());
             params.put(GROUP_ID, entity.getGroupId());
             params.put(TEACHER_ID, entity.getTeacherId());
-            params.put(DATE, entity.getDate());
+            params.put(DAY_OF_WEEK_ID, entity.getDayOfWeek());
             params.put(LESSON_TIME_ID, entity.getLessonTimeId());
             params.put(LESSON_ROOM_ID, entity.getLessonRoomId());
             Number id = lessonInsert.executeAndReturnKey(params);
-            return new Lesson(id.longValue(), entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDate(), entity.getLessonTimeId(), entity.getLessonRoomId());
+            logger.debug("Created a new lesson with course id = {}, group id = {}, teacher id = {}, date  = {}, lesson room id = {}, lesson time id = {}",entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDayOfWeek(), entity.getLessonRoomId(), entity.getLessonTimeId());
+            return new Lesson(id.longValue(), entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDayOfWeek(), entity.getLessonTimeId(), entity.getLessonRoomId());
         } catch (DataAccessException e) {
+            logger.debug("Unable to create a new lesson with course id = {}, group id = {}, teacher id = {}, date  = {}, lesson room id = {}, lesson time id = {}",entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDayOfWeek(), entity.getLessonRoomId(), entity.getLessonTimeId());
+
             throw new DaoException("Unable to create a new lesson", e);
         }
     }
 
     @Override
     protected Lesson update(Lesson entity) {
-        if (jdbcTemplate.update(UPDATE, entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDate(), entity.getLessonTimeId(), entity.getLessonRoomId(), entity.getId()) == 1) {
-            return new Lesson(entity.getId(), entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDate(), entity.getLessonTimeId(), entity.getLessonRoomId());
+        if (jdbcTemplate.update(UPDATE, entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDayOfWeek(), entity.getLessonTimeId(), entity.getLessonRoomId(), entity.getId()) == 1) {
+            logger.debug("Updated lesson with id = {}", entity.getId());
+            return new Lesson(entity.getId(), entity.getCourseId(), entity.getGroupId(), entity.getTeacherId(), entity.getDayOfWeek(), entity.getLessonTimeId(), entity.getLessonRoomId());
         } else {
+            logger.warn("Unable to update lesson with id = {}", entity.getId());
             throw new DaoException("Unable to update lesson with id=" + entity.getId());
         }
     }
@@ -86,6 +96,7 @@ public class JdbcLessonDao extends AbstractCrudDao<Lesson, Long> implements Less
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, lessonMapper, id));
 
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("Lesson with id =" + id + " not found");
             return Optional.empty();
         }
     }

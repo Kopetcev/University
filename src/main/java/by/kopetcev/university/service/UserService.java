@@ -13,7 +13,7 @@ public interface UserService {
 
     List<User> findAll();
 
-    Optional<User> findById(Long userId);
+    User findById(Long userId);
 
     Optional<User> findByLoginPassword(String login, String password);
 

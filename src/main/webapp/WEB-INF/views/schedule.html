@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>University of Shire</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="main">
+    <div class="h1-wrapper px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h2>Schedule</h2>
+        <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+            <div class="table-wrapper table-responsive">
+                <table class="table schedule-table table-striped table-bordered">
+                    <thead>
+                    <th scope="col">Day</th>
+                    <th scope="col">#</th>
+                    <div th:each="group : ${groups}">
+                        <th scope="col " th:text="${group.name}">Group1</th>
+                    </div>
+                    </thead>
+                    <div th:each="lessonsOfDay, stat : ${schedule}">
+                        <tbody>
+                        <td class="table-day" rowspan="7" scope="row" th:text="${dayOfWeek[stat.index]}">Day of week
+                        </td>
+                        <div th:each="lessonsOfTime, stat : ${lessonsOfDay}">
+                            <tr>
+                                <td th:text="${stat.index + 1}">1</td>
+                                <div th:each="lesson, stat : ${lessonsOfTime.value}">
+                                    <td><a th:href="@{/lesson/{id}(id=${lesson.getId()})}"
+                                           th:text="${lesson.course.name}">Course</a></td>
+                                </div>
+                            </tr>
+                        </div>
+                        </tbody>
+                    </div>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

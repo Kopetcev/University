@@ -4,12 +4,12 @@ import by.kopetcev.university.dao.CourseDao;
 import by.kopetcev.university.dao.jdbc.mappers.CourseMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.Course;
-import by.kopetcev.university.model.Teacher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -49,6 +49,9 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
 
     private final SimpleJdbcInsert teacherCourseInsert;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcCourseDao.class);
+
 
     @Autowired
     protected JdbcCourseDao(DataSource dataSource, CourseMapper courseMapper) {
@@ -64,8 +67,10 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
             Map<String, Object> params = new HashMap<>();
             params.put(COURSE_NAME, entity.getName());
             Number id = courseInsert.executeAndReturnKey(params);
+            logger.debug("Created a new course with course name = {}", entity.getName() );
             return new Course(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
+            logger.warn("Unable to create a new course with course name = {}", entity.getName(), e);
             throw new DaoException("Unable to create a new course", e);
         }
     }
@@ -73,9 +78,11 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
     @Override
     protected Course update(Course entity) {
         if (jdbcTemplate.update(UPDATE, entity.getName(), entity.getId()) == 1) {
+            logger.debug("Updated course with id = {}", entity.getId());
             return new Course(entity.getId(), entity.getName());
         } else {
-            throw new DaoException("Unable to update course with id=" + entity.getId());
+            logger.warn("Unable to update course with id = {}", entity.getId());
+            throw new DaoException("Unable to update course with id = " + entity.getId());
         }
     }
 
@@ -84,6 +91,7 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, courseMapper, id));
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("Course with id = {} not found", id, e);
             return Optional.empty();
         }
     }
@@ -104,10 +112,11 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
         params.put(COURSE_ID, courseId);
         params.put(TEACHER_ID, teacherId);
         if (teacherCourseInsert.execute(params) == 1) {
+            logger.debug("Assigned teacher with id = {} to course with id ={}", teacherId, courseId);
             return true;
         } else {
-            throw new DaoException("Unable to assign course with id = " + courseId + " to teacher with id = " + teacherId);
-
+            logger.warn("Unable to assign teacher with id = {} to course with id ={}", teacherId, courseId);
+            throw new DaoException("Unable to assign teacher with id = " + teacherId + " to course with id = " + courseId);
         }
     }
 

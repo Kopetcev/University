@@ -41,7 +41,7 @@ class CourseServiceImplTest {
     void shouldInvokeFindById() {
         Optional<Course> expected = Optional.of(new Course(1L, "course"));
         when(courseDaoMock.findById(expected.get().getId())).thenReturn(expected);
-        assertThat(service.findById(expected.get().getId()), equalTo(expected));
+        assertThat(service.findById(expected.get().getId()), equalTo(expected.get()));
         Mockito.verify(courseDaoMock, Mockito.times(1)).findById(expected.get().getId());
     }
 

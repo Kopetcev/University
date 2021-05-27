@@ -23,6 +23,20 @@ CREATE TABLE lesson_times
     lesson_end     TIME WITH TIME ZONE NOT NULL
 );
 
+CREATE TABLE day_of_week
+(
+    day_of_week_id SMALLINT NOT NULL PRIMARY KEY
+);
+
+INSERT INTO day_of_week (day_of_week_id)
+VALUES (1),
+       (2),
+       (3),
+       (4),
+       (5),
+       (6),
+       (7);
+
 CREATE TABLE roles
 (
     role_id   SERIAL             NOT NULL PRIMARY KEY,
@@ -89,15 +103,16 @@ CREATE TABLE lessons
     course_id      INT    NOT NULL,
     group_id       INT    NOT NULL,
     teacher_id     INT    NOT NULL,
-    date           DATE   NOT NULL,
+    day_of_week_id SMALLINT    NOT NULL,
     lesson_time_id INT    NOT NULL,
     lesson_room_id INT    NOT NULL,
     FOREIGN KEY (lesson_time_id) REFERENCES lesson_times,
+    FOREIGN KEY (day_of_week_id) references day_of_week,
     FOREIGN KEY (group_id) REFERENCES groups,
     FOREIGN KEY (course_id) REFERENCES courses,
     FOREIGN KEY (teacher_id) REFERENCES teachers,
     FOREIGN KEY (lesson_room_id) REFERENCES lesson_rooms,
-    CONSTRAINT teacher_unique UNIQUE (teacher_id, lesson_time_id, date),
-    CONSTRAINT groups_unique UNIQUE (group_id, lesson_time_id, date),
-    CONSTRAINT lesson_rooms_unique UNIQUE (lesson_room_id, lesson_time_id, date)
+    CONSTRAINT teacher_unique UNIQUE (teacher_id, lesson_time_id, day_of_week_id),
+    CONSTRAINT groups_unique UNIQUE (group_id, lesson_time_id, day_of_week_id),
+    CONSTRAINT lesson_rooms_unique UNIQUE (lesson_room_id, lesson_time_id, day_of_week_id)
 );

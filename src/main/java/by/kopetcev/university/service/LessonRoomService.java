@@ -3,7 +3,6 @@ package by.kopetcev.university.service;
 import by.kopetcev.university.model.LessonRoom;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface LessonRoomService {
 
@@ -13,5 +12,5 @@ public interface LessonRoomService {
 
     List<LessonRoom> findAll();
 
-    Optional<LessonRoom> findById(Long lessonRoomId);
+    LessonRoom findById(Long lessonRoomId);
 }

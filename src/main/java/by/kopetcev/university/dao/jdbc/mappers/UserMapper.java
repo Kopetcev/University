@@ -3,6 +3,8 @@ package by.kopetcev.university.dao.jdbc.mappers;
 import by.kopetcev.university.model.Student;
 import by.kopetcev.university.model.Teacher;
 import by.kopetcev.university.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -13,14 +15,25 @@ import java.sql.SQLException;
 public class UserMapper implements RowMapper<User> {
 
     public static final String USER_ID = "user_id";
+
     public static final String TEACHER_ID = "teacher_user_id";
+
     public static final String STUDENT_ID = "student_user_id";
+
     public static final String USER_LOGIN = "login";
+
     public static final String USER_PASSWORD = "password";
+
     public static final String USER_EMAIL = "email";
+
     public static final String USER_FIRST_NAME = "first_name";
+
     public static final String USER_LAST_NAME = "last_name";
+
     public static final String GROUP_ID = "group_id";
+
+    private static final Logger logger = LoggerFactory.getLogger(
+           UserMapper.class);
 
     @Override
     public User mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -51,6 +64,8 @@ public class UserMapper implements RowMapper<User> {
                     resultSet.getString(USER_LAST_NAME));
 
         } catch (Exception e) {
+            logger.warn("Unable to map user", e);
+
             throw new RuntimeException("Unable to map row", e);
         }
     }

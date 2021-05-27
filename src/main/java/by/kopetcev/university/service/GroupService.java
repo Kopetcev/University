@@ -3,7 +3,6 @@ package by.kopetcev.university.service;
 import by.kopetcev.university.model.Group;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GroupService {
 
@@ -13,5 +12,5 @@ public interface GroupService {
 
     List<Group> findAll();
 
-    Optional<Group> findById(Long groupID);
+    Group findById(Long groupID);
 }

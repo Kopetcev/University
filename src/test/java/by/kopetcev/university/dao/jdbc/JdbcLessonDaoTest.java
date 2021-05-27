@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +24,13 @@ class JdbcLessonDaoTest extends BaseDaoTest {
 
     @Test
     void shouldCreate() {
-        Lesson expected = new Lesson(3L, 2L, 3L, LocalDate.of(2021, 9, 9), 2L, 3L);
+        Lesson expected = new Lesson(2L, 2L, 2L, 1L, 4L, 2L);
         assertThat(expected.getId(), nullValue());
 
         Lesson created = dao.create(expected);
         assertThat(created.getCourseId(), equalTo(expected.getCourseId()));
         assertThat(created.getGroupId(), equalTo(expected.getGroupId()));
-        assertThat(created.getDate(), equalTo(expected.getDate()));
+        assertThat(created.getDayOfWeek(), equalTo(expected.getDayOfWeek()));
         assertThat(created.getLessonTimeId(), equalTo(expected.getLessonTimeId()));
         assertThat(created.getLessonRoomId(), equalTo(expected.getLessonRoomId()));
         assertThat(created.getId(), notNullValue());
@@ -42,11 +41,13 @@ class JdbcLessonDaoTest extends BaseDaoTest {
         assertThat(actual.get(), equalTo(created));
     }
 
+
+
     @Test
     void shouldFindOne() {
         Optional<Lesson> found = dao.findById(4L);
         assertThat(found.isPresent(), is(true));
-        assertThat(found.get(), equalTo(new Lesson(4L, 1L, 2L, 3L, LocalDate.of(2021, 10, 1), 1L, 2L)));
+        assertThat(found.get(), equalTo(new Lesson(4L, 1L, 5L, 3L, 3L, 3L, 2L)));
     }
 
     @Test
@@ -58,9 +59,9 @@ class JdbcLessonDaoTest extends BaseDaoTest {
     @Test
     void shouldFindAll() {
         List<Lesson> all = dao.findAll();
-        assertThat(all, hasItems(new Lesson(1L, 1L, 1L, 1L, LocalDate.of(2021, 9, 1), 1L, 1L),
-                new Lesson(2L, 2L, 2L, 2L, LocalDate.of(2021, 9, 2), 2L, 2L),
-                new Lesson(3L, 3L, 3L, 3L, LocalDate.of(2021, 9, 3), 3L, 3L)));
+        assertThat(all, hasItems(new Lesson(1L, 1L, 1L, 1L, 7L, 5L, 3L),
+                new Lesson(2L, 2L, 6L, 2L, 1L, 2L, 4L),
+                new Lesson(3L, 3L, 3L, 3L, 4L, 5L, 3L)));
     }
 
     @Test
@@ -74,7 +75,7 @@ class JdbcLessonDaoTest extends BaseDaoTest {
     @Test
     void shouldUpdate() {
         long id = 6L;
-        Lesson upLesson = new Lesson(id, 3L, 3L, 3L, LocalDate.of(2021, 9, 6), 3L, 3L);
+        Lesson upLesson = new Lesson(id, 3L, 3L, 3L, 6L, 3L, 3L);
         Lesson updated = dao.update(upLesson);
         assertThat(updated, equalTo(upLesson));
         assertThat(updated, equalTo(dao.findById(id).get()));

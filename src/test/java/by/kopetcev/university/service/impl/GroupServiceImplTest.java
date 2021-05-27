@@ -39,7 +39,7 @@ class GroupServiceImplTest {
     void shouldInvokeFindById() {
         Optional<Group> expected = Optional.of(new Group(1L, "group"));
         when(groupDaoMock.findById(expected.get().getId())).thenReturn(expected);
-        assertThat(service.findById(expected.get().getId()), equalTo(expected));
+        assertThat(service.findById(expected.get().getId()), equalTo(expected.get()));
         Mockito.verify(groupDaoMock, Mockito.times(1)).findById(expected.get().getId());
     }
 

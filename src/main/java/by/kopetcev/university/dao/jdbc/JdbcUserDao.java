@@ -3,9 +3,9 @@ package by.kopetcev.university.dao.jdbc;
 import by.kopetcev.university.dao.UserDao;
 import by.kopetcev.university.dao.jdbc.mappers.UserMapper;
 import by.kopetcev.university.exception.DaoException;
-import by.kopetcev.university.model.Student;
-import by.kopetcev.university.model.Teacher;
 import by.kopetcev.university.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -85,6 +85,9 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
 
     private final SimpleJdbcInsert teacherInsert;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcUserDao.class);
+
     @Autowired
     protected JdbcUserDao(DataSource dataSource, UserMapper userMapper) {
         super(dataSource);
@@ -104,8 +107,11 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
             params.put(USER_FIRST_NAME, entity.getFirstName());
             params.put(USER_LAST_NAME, entity.getLastName());
             Number id = userInsert.executeAndReturnKey(params);
+            logger.debug("Created a new user with login = {}, email = {}, first name = {}, last name = {}",entity.getLogin(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
+
             return new User(id.longValue(), entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
         } catch (DataAccessException e) {
+            logger.debug("Unable to create a new user with login = {}, email = {}, first name = {}, last name = {}",entity.getLogin(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
             throw new DaoException("Unable to create a new user", e);
         }
     }
@@ -113,8 +119,10 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
     @Override
     protected User update(User entity) {
         if (jdbcTemplate.update(UPDATE, entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName(), entity.getId()) == 1) {
+            logger.debug("Updated user with id = {}", entity.getId());
             return new User(entity.getId(), entity.getLogin(), entity.getPassword(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
         } else {
+            logger.warn("Unable to update user with id = {}, login = {}, email = {}, first name = {}, last name = {}", entity.getId(), entity.getLogin(), entity.getEmail(), entity.getFirstName(), entity.getLastName());
             throw new DaoException("Unable to update user with id=" + entity.getId());
         }
     }
@@ -124,6 +132,7 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, userMapper, id));
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("User with id = {} not found", id);
             return Optional.empty();
         }
     }
@@ -143,6 +152,7 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
     try {
         return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_LOGIN_PASSWORD, userMapper, login, password));
     } catch (EmptyResultDataAccessException e) {
+        logger.debug("User with this login and password not found");
         return Optional.empty();
     }
 }
@@ -153,8 +163,10 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
                 params.put(STUDENT_ID, userId);
                 params.put(GROUP_ID, groupId);
         if (studentInsert.execute(params) == 1) {
+            logger.debug("Assigned student to user with id = {} with group with  id {}", userId, groupId);
             return true;
         } else {
+            logger.debug("Unable to assign student to user with id = {} with group with  id {}", userId, groupId);
             throw new DaoException("Unable to assign student to user with id = " + userId);
         }
     }
@@ -164,8 +176,10 @@ public class JdbcUserDao extends AbstractCrudDao<User, Long> implements UserDao 
         Map<String, Object> params = new HashMap<>();
         params.put(TEACHER_ID, userId);
         if (teacherInsert.execute(params) == 1) {
+            logger.debug("Assigned teacher to user with id = {}", userId);
             return true;
         } else {
+            logger.debug("Unable to assign teacher to user with id = {}", userId);
             throw new DaoException("Unable to assign teacher to user with id = " + userId);
         }
     }

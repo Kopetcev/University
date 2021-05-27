@@ -1,6 +1,7 @@
 package by.kopetcev.university.dao.jdbc;
 
 import by.kopetcev.university.dao.PostgresDatabaseContainer;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -8,10 +9,11 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-public class BaseDaoTest {
+@ActiveProfiles("test")
+abstract public class BaseDaoTest {
 
     @Container
-    static PostgreSQLContainer postgreSQLContainer = PostgresDatabaseContainer.getInstance();
+    static PostgreSQLContainer<PostgresDatabaseContainer> postgreSQLContainer = PostgresDatabaseContainer.getInstance();
 
     @DynamicPropertySource
     static void postgresProperties(DynamicPropertyRegistry registry) {

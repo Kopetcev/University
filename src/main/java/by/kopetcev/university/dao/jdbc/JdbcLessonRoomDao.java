@@ -4,6 +4,8 @@ import by.kopetcev.university.dao.LessonRoomDao;
 import by.kopetcev.university.dao.jdbc.mappers.LessonRoomMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.LessonRoom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,6 +39,9 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
 
     private final SimpleJdbcInsert lessonRoomInsert;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcLessonRoomDao.class);
+
     @Autowired
     protected JdbcLessonRoomDao(DataSource dataSource, LessonRoomMapper lessonRoomMapper) {
         super(dataSource);
@@ -50,8 +55,10 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
             Map<String, Object> params = new HashMap<>();
             params.put(LESSON_ROOM_NAME, entity.getName());
             Number id = lessonRoomInsert.executeAndReturnKey(params);
+            logger.debug("Created a new lesson room with name = {}", entity.getName() );
             return new LessonRoom(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
+            logger.warn("Unable to create a new lesson room with name = {}", entity.getName(), e);
             throw new DaoException("Unable to create a new lessonRoom", e);
         }
     }
@@ -59,8 +66,10 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
     @Override
     protected LessonRoom update(LessonRoom entity) {
         if (jdbcTemplate.update(UPDATE, entity.getName(), entity.getId()) == 1) {
+            logger.debug("Updated lesson room with id = {}", entity.getId());
             return new LessonRoom(entity.getId(), entity.getName());
         } else {
+            logger.warn("Unable to update lesson room with id = {}", entity.getId());
             throw new DaoException("Unable to update lessonRoom with id=" + entity.getId());
         }
     }
@@ -70,6 +79,8 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, lessonRoomMapper, id));
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("Lesson room with id = {} not found", id);
+
             return Optional.empty();
         }
     }

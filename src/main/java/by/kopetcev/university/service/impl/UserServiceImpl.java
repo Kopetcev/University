@@ -7,16 +7,23 @@ import by.kopetcev.university.model.Student;
 import by.kopetcev.university.model.Teacher;
 import by.kopetcev.university.model.User;
 import by.kopetcev.university.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(
+            UserServiceImpl.class);
 
     @Autowired
     public UserServiceImpl(UserDao userDao){
@@ -39,8 +46,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long userId) {
-        return userDao.findById(userId);
+    public User findById(Long userId) {
+        Optional<User> optionalUser = userDao.findById(userId);
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        }else
+            logger.warn("User with id = {} not found", userId);
+        throw new ServiceException("User with id = " + userId + " not found");
     }
 
     @Override
@@ -52,10 +64,12 @@ public class UserServiceImpl implements UserService {
     public boolean assignStudent(Long userId, Long groupId) {
         Optional<User> optionalUser = userDao.findById(userId);
         if(optionalUser.isEmpty()){
+            logger.warn("Cannot assign student. User does not exist with id = {}", userId);
             throw new ServiceException("User does not exist with id =" + userId);
         }
         if(optionalUser.get() instanceof Teacher){
-            throw new ServiceException("User with id = " + userId + " is already a teacher =");
+            logger.warn("Cannot assign student. User with id = {} is already a teacher", userId);
+            throw new ServiceException("User with id = " + userId + " is already a teacher");
         }
 
         return userDao.assignStudent(userId, groupId);
@@ -66,10 +80,12 @@ public class UserServiceImpl implements UserService {
     public boolean assignTeacher(Long userId) {
         Optional<User> optionalUser = userDao.findById(userId);
         if(optionalUser.isEmpty()){
+            logger.warn("Cannot assign teacher. User does not exist with id = {}", userId);
             throw new ServiceException("User does not exist with id =" + userId);
         }
         if(optionalUser.get() instanceof Student){
-            throw new ServiceException("User with id = " + userId + " is already a student =");
+            logger.warn("Cannot assign teacher. User with id = {} is already a student", userId);
+            throw new ServiceException("User with id = " + userId + " is already a student");
         }
         return userDao.assignTeacher(userId);
     }
@@ -85,9 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllTeacher() {
-        return userDao.findAllTeacher();
-    }
+    public List<User> findAllTeacher() { return userDao.findAllTeacher(); }
 
     @Override
     public List<User> findAllStudent() {

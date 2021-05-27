@@ -4,6 +4,8 @@ import by.kopetcev.university.dao.LessonTimeDao;
 import by.kopetcev.university.dao.jdbc.mappers.LessonTimeMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.LessonTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,6 +41,9 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
 
     private final SimpleJdbcInsert lessonTimeInsert;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcLessonTimeDao.class);
+
     @Autowired
     protected JdbcLessonTimeDao(DataSource dataSource, LessonTimeMapper lessonTimeMapper) {
         super(dataSource);
@@ -53,8 +58,10 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
             params.put(LESSON_TIME_START, entity.getStart());
             params.put(LESSON_TIME_END, entity.getEnd());
             Number id = lessonTimeInsert.executeAndReturnKey(params);
+            logger.debug("Created a new lesson time with start time = {}, end time = {}", entity.getStart(), entity.getEnd());
             return new LessonTime(id.longValue(), entity.getStart(), entity.getEnd());
         } catch (DataAccessException e) {
+            logger.warn("Unable to create a new lesson time with start time = {}, end time = {}", entity.getStart(), entity.getEnd());
             throw new DaoException("Unable to create a new lessonTime", e);
         }
     }
@@ -62,8 +69,10 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
     @Override
     protected LessonTime update(LessonTime entity) {
         if (jdbcTemplate.update(UPDATE, entity.getStart(), entity.getEnd(), entity.getId()) == 1) {
+            logger.debug("Updated lessonTime with id = {}", entity.getId());
             return new LessonTime(entity.getId(), entity.getStart(), entity.getEnd());
         } else {
+            logger.warn("Unable to update lessonTime with id = {}", entity.getId());
             throw new DaoException("Unable to update lessonTime with id=" + entity.getId());
         }
     }
@@ -73,6 +82,7 @@ public class JdbcLessonTimeDao extends AbstractCrudDao<LessonTime, Long> impleme
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, lessonTimeMapper, id));
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("LessonTime with id = {} not found", id);
             return Optional.empty();
         }
     }

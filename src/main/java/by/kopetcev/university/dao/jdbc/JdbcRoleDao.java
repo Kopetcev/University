@@ -4,7 +4,8 @@ import by.kopetcev.university.dao.RoleDao;
 import by.kopetcev.university.dao.jdbc.mappers.RoleMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.Role;
-import by.kopetcev.university.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -48,6 +49,9 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
 
     private final SimpleJdbcInsert userRoleInsert;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcRoleDao.class);
+
     @Autowired
     protected JdbcRoleDao(DataSource dataSource, RoleMapper roleMapper) {
         super(dataSource);
@@ -62,8 +66,11 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
             Map<String, Object> params = new HashMap<>();
             params.put(ROLE_NAME, entity.getName());
             Number id = roleInsert.executeAndReturnKey(params);
+            logger.debug("Created a new role with name = {}", entity.getName() );
             return new Role(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
+            logger.warn("Unable to create a new role with name = {}", entity.getName(), e);
+
             throw new DaoException("Unable to create a new role", e);
         }
     }
@@ -71,8 +78,10 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
     @Override
     protected Role update(Role entity) {
         if (jdbcTemplate.update(UPDATE, entity.getName(), entity.getId()) == 1) {
+            logger.debug("Updated role with id = {}", entity.getId());
             return new Role(entity.getId(), entity.getName());
         } else {
+            logger.warn("Unable to update role with id = {}", entity.getId());
             throw new DaoException("Unable to update role with id=" + entity.getId());
         }
     }
@@ -83,6 +92,7 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, roleMapper, id));
 
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("Role with id = {} not found", id);
             return Optional.empty();
         }
     }
@@ -103,8 +113,10 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
         params.put(ROLE_ID, roleId);
         params.put(USER_ID, userId);
         if (userRoleInsert.execute(params) == 1) {
+            logger.debug("Assigned role with id = {} to user with id {}", roleId, userId);
             return true;
         } else {
+            logger.debug("Unable to assign role with id = {} to user with id {}", roleId, userId);
             throw new DaoException("Unable to assign role with id = " + roleId + " to user with id = " + userId);
 
         }

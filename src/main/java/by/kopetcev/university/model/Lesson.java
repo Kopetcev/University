@@ -8,25 +8,25 @@ public class Lesson implements Entity<Long> {
     private Long courseId;
     private Long groupId;
     private Long teacherId;
-    private LocalDate date;
+    private Long dayOfWeek;
     private Long lessonTimeId;
     private Long lessonRoomId;
 
-    public Lesson(Long courseId, Long groupId, Long teacherId, LocalDate date, Long lessonTimeId, Long lessonRoomId) {
+    public Lesson(Long courseId, Long groupId, Long teacherId, Long dayOfWeek, Long lessonTimeId, Long lessonRoomId) {
         this.courseId = courseId;
         this.groupId = groupId;
         this.teacherId = teacherId;
-        this.date = date;
+        this.dayOfWeek = dayOfWeek;
         this.lessonTimeId = lessonTimeId;
         this.lessonRoomId = lessonRoomId;
     }
 
-    public Lesson(Long id, Long courseId, Long groupId, Long teacherId, LocalDate date, Long lessonTimeId, Long lessonRoomId) {
+    public Lesson(Long id, Long courseId, Long groupId, Long teacherId, Long dayOfWeek, Long lessonTimeId, Long lessonRoomId) {
         this.id = id;
         this.courseId = courseId;
         this.groupId = groupId;
         this.teacherId = teacherId;
-        this.date = date;
+        this.dayOfWeek = dayOfWeek;
         this.lessonTimeId = lessonTimeId;
         this.lessonRoomId = lessonRoomId;
     }
@@ -79,12 +79,12 @@ public class Lesson implements Entity<Long> {
         this.lessonRoomId = lessonRoomId;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Long getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDayOfWeek(Long dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 
     @Override
@@ -120,10 +120,10 @@ public class Lesson implements Entity<Long> {
                 return false;
             }
         }
-        if (null == date) {
-            return (date == lesson.date);
+        if (null == dayOfWeek) {
+            return (dayOfWeek == lesson.dayOfWeek);
         } else {
-            if (!date.equals(lesson.date)) {
+            if (!dayOfWeek.equals(lesson.dayOfWeek)) {
                 return false;
             }
         }
@@ -146,7 +146,7 @@ public class Lesson implements Entity<Long> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, courseId, groupId, teacherId, date, lessonTimeId, lessonRoomId);
+        return Objects.hash(id, courseId, groupId, teacherId, dayOfWeek, lessonTimeId, lessonRoomId);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class Lesson implements Entity<Long> {
                 ", courseId=" + courseId +
                 ", groupId=" + groupId +
                 ", teacherId=" + teacherId +
-                ", date=" + date +
+                ", dayOfWeek=" + dayOfWeek +
                 ", lessonTimeId=" + lessonTimeId +
                 ", lessonRoomId=" + lessonRoomId +
                 '}';

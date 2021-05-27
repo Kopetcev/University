@@ -39,7 +39,7 @@ class RoleServiceImplTest {
     void shouldInvokeFindById() {
         Optional<Role> expected = Optional.of(new Role(1L, "manager"));
         when(roleDaoMock.findById(expected.get().getId())).thenReturn(expected);
-        assertThat(service.findById(expected.get().getId()), equalTo(expected));
+        assertThat(service.findById(expected.get().getId()), equalTo(expected.get()));
         Mockito.verify(roleDaoMock, Mockito.times(1)).findById(expected.get().getId());
     }
 

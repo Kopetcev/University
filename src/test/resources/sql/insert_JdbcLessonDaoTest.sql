@@ -1,7 +1,11 @@
 INSERT INTO groups (group_name)
 VALUES ('group101'),
        ('group102'),
-       ('group103');
+       ('group103'),
+       ('group104'),
+       ('group105'),
+       ('group106');
+
 
 INSERT INTO courses (course_name)
 VALUES ('math'),
@@ -21,17 +25,22 @@ VALUES (1),
 INSERT INTO lesson_times (lesson_start, lesson_end)
 VALUES ('8:00', '9:00'),
        ('9:00', '10:00'),
-       ('10:00', '11:00');
+       ('10:00', '11:00'),
+       ('11:00', '12:00'),
+       ('12:00', '13:00'),
+       ('13:00', '14:00');
 
 INSERT INTO lesson_rooms (lesson_room_name)
 VALUES ('room101'),
        ('room102'),
-       ('room103');
+       ('room103'),
+       ('room104'),
+       ('room104');
 
-INSERT INTO lessons (course_id, group_id, teacher_id, date, lesson_time_id, lesson_room_id)
-VALUES (1, 1, 1, '9/01/2021', 1, 1),
-       (2, 2, 2, '9/02/2021', 2, 2),
-       (3, 3, 3, '9/03/2021', 3, 3),
-       (1, 2, 3, '10/01/2021', 1, 2),
-       (1, 1, 1, '11/01/2021', 1, 1),
-       (3, 2, 1, '12/14/2021', 3, 3);
+INSERT INTO lessons (course_id, group_id, teacher_id, day_of_week_id, lesson_time_id, lesson_room_id)
+VALUES (1, 1, 1, 7, 5, 3),
+       (2, 6, 2, 1, 2, 4),
+       (3, 3, 3, 4, 5, 3),
+       (1, 5, 3, 3, 3, 2),
+       (1, 1, 1, 5, 1, 5),
+       (3, 2, 1, 6, 3, 3);

@@ -40,7 +40,7 @@ class LessonTimeServiceImplTest {
     void shouldInvokeFindById() {
         Optional<LessonTime> expected = Optional.of(new LessonTime(1L, LocalTime.of(10, 0), LocalTime.of(11, 0)));
         when(lessonTimeDaoMock.findById(expected.get().getId())).thenReturn(expected);
-        assertThat(service.findById(expected.get().getId()), equalTo(expected));
+        assertThat(service.findById(expected.get().getId()), equalTo(expected.get()));
         Mockito.verify(lessonTimeDaoMock, Mockito.times(1)).findById(expected.get().getId());
     }
 

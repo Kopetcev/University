@@ -10,6 +10,10 @@ public class User implements Entity<Long> {
     private String firstName;
     private String lastName;
 
+    public User(){
+
+    }
+
     public User(String login, String password, String email, String firstName, String lastName) {
         this.login = login;
         this.password = password;

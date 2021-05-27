@@ -3,8 +3,6 @@ package by.kopetcev.university.service;
 import by.kopetcev.university.model.Course;
 
 import java.util.List;
-import java.util.Optional;
-
 
 public interface CourseService {
 
@@ -14,7 +12,7 @@ public interface CourseService {
 
     List<Course> findAll();
 
-    Optional<Course> findById(Long courseId);
+    Course findById(Long courseId);
 
     boolean assignTeacher(Long courseId, Long teacherId);
 

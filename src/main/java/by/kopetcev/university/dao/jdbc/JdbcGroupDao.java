@@ -4,6 +4,8 @@ import by.kopetcev.university.dao.GroupDao;
 import by.kopetcev.university.dao.jdbc.mappers.GroupMapper;
 import by.kopetcev.university.exception.DaoException;
 import by.kopetcev.university.model.Group;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,6 +39,10 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
 
     private final SimpleJdbcInsert groupInsert;
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            JdbcGroupDao.class);
+
+
     @Autowired
     protected JdbcGroupDao(DataSource dataSource, GroupMapper groupMapper) {
         super(dataSource);
@@ -50,8 +56,10 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
             Map<String, Object> params = new HashMap<>();
             params.put(GROUP_NAME, entity.getName());
             Number id = groupInsert.executeAndReturnKey(params);
+            logger.debug("Created a new group with name = {}", entity.getName());
             return new Group(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
+            logger.warn("Unable to create a new group with name = {}", entity.getName(), e);
             throw new DaoException("Unable to create a new group", e);
         }
     }
@@ -59,8 +67,11 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
     @Override
     protected Group update(Group entity) {
         if (jdbcTemplate.update(UPDATE, entity.getName(), entity.getId()) == 1) {
+            logger.debug("Updated group with id = {}", entity.getId());
+
             return new Group(entity.getId(), entity.getName());
         } else {
+            logger.warn("Unable to update group with id = {}", entity.getId());
             throw new DaoException("Unable to update group with id=" + entity.getId());
         }
     }
@@ -71,6 +82,7 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, groupMapper, id));
 
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("Group with id ={} not found", id);
             return Optional.empty();
         }
     }

@@ -39,7 +39,7 @@ class LessonRoomServiceImplTest {
     void shouldInvokeFindById() {
         Optional<LessonRoom> expected = Optional.of(new LessonRoom(1L, "101"));
         when(lessonRoomDaoMock.findById(expected.get().getId())).thenReturn(expected);
-        assertThat(service.findById(expected.get().getId()), equalTo(expected));
+        assertThat(service.findById(expected.get().getId()), equalTo(expected.get()));
         Mockito.verify(lessonRoomDaoMock, Mockito.times(1)).findById(expected.get().getId());
     }
 
