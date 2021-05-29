@@ -35,8 +35,8 @@ public class Role implements Entity<Long> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return id == role.id &&
+        var role = (Role) o;
+        return id.equals(role.id) &&
                 Objects.equals(name, role.name);
     }
 

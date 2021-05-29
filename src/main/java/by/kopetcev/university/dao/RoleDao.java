@@ -1,7 +1,6 @@
 package by.kopetcev.university.dao;
 
 import by.kopetcev.university.model.Role;
-import by.kopetcev.university.model.User;
 
 import java.util.List;
 

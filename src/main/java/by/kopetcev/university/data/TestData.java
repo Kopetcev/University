@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -24,7 +26,7 @@ public class TestData {
             "Johnson", "Kelly", "Washington", "Garcia", "Hall", "Thomas", "Parker", "Barnes", "Rodriguez", "Ramirez",
             "Brooks", "Gonzalez", "Anderson", "Brown"};
     private static final String[] COURSE_NAMES = {"Biology", "Architecture", "Economics", "Geography", "Mathematics",
-            "Music", "Philosophy", "Physics", "Sociology", "Pharmacy", "Medicine", "Chinese", };
+            "Music", "Philosophy", "Physics", "Sociology", "Pharmacy", "Medicine", "Chinese",};
     private static final LocalTime[] TIMES = {LocalTime.of(8, 0), LocalTime.of(8, 45),
             LocalTime.of(8, 55), LocalTime.of(9, 40),
             LocalTime.of(9, 45), LocalTime.of(10, 30),
@@ -130,7 +132,7 @@ public class TestData {
                 lessonTimeService.add(newLessonTime);
                 logger.debug("Add lesson time{}", newLessonTime);
             } catch (Exception e) {
-                logger.debug("Unable to add {}" , newLessonTime, e);
+                logger.debug("Unable to add {}", newLessonTime, e);
             }
         }
     }
@@ -161,21 +163,6 @@ public class TestData {
         }
     }
 
-    private void addUsers() {
-        User newUser;
-        for (int i = 0; i < NUMBER_OF_USERS; i++) {
-            String firstName = NAMES[random.nextInt(NAMES.length - 1)];
-            String lastName = LASTNAMES[random.nextInt(LASTNAMES.length - 1)];
-            newUser = new User(lastName + firstName.charAt(0), getPassword(), firstName + lastName.substring(0, 2) + "@mail.com", firstName, lastName);
-            try {
-                userService.add(newUser);
-                logger.debug("Add user {}", newUser);
-            } catch (Exception e) {
-               logger.debug("Unable to add {}", newUser, e);
-            }
-        }
-    }
-
     private void assignTeacherAndCourses() {
         List<User> users = userService.findAll();
         List<Course> courses = courseService.findAll();
@@ -183,7 +170,7 @@ public class TestData {
 
             try {
                 userService.assignTeacher(users.get(i).getId());
-                logger.debug("Assign teacher with id = {}", + users.get(i).getId());
+                logger.debug("Assign teacher with id = {}", +users.get(i).getId());
                 courseService.assignTeacher(courses.get(i).getId(), users.get(i).getId());
                 logger.debug("Assign {} to Teacher with {}", users.get(i), courses.get(i));
             } catch (Exception e) {
@@ -198,9 +185,29 @@ public class TestData {
         for (int i = 0; i < roles.size(); i++) {
             try {
                 roleService.assignUser(roles.get(i).getId(), users.get(i + COURSE_NAMES.length).getId());
-                logger.debug("Assign {} to {} ",roles.get(i), users.get(i));
+                logger.debug("Assign {} to {} ", roles.get(i), users.get(i));
             } catch (Exception e) {
-               logger.debug("Unable to assign {} to {} ",roles.get(i), users.get(i), e);
+                logger.debug("Unable to assign {} to {} ", roles.get(i), users.get(i), e);
+            }
+        }
+    }
+
+    private void addUsers() {
+        Set<String> seen = new HashSet<>();
+        User newUser;
+        for (int i = 0; i < NUMBER_OF_USERS; i++) {
+            String firstName = random(NAMES);
+            String lastName = random(LASTNAMES);
+            newUser = new User(
+                    unique(seen, lastName + firstName.charAt(0) + "%s"),
+                    generatePassword(),
+                    unique(seen, firstName + lastName.substring(0, 2) + "%s@mail.com"),
+                    firstName, lastName);
+            try {
+                userService.add(newUser);
+                logger.debug("Add user {}", newUser);
+            } catch (Exception e) {
+                logger.debug("Unable to add {}", newUser, e);
             }
         }
     }
@@ -225,16 +232,25 @@ public class TestData {
         List<LessonTime> lessonTimes = lessonTimeService.findAll();
         List<LessonRoom> lessonRooms = lessonRoomService.findAll();
         Lesson newLesson;
-
+        int indexRoom = 0;
+        int indexTeacher = 0;
         for (int i = 1; i <= NUMBER_DAY_OF_WEEK; i++) {
             for (int j = 0; j < NUMBER_OF_LESSON_TIMES; j++) {
                 for (int k = 0; k < NUMBER_OF_LESSON_PER_DAY; k++) {
+                    if (indexTeacher >= teachers.size()) {
+                        indexTeacher = 0;
+                    }
+                    if (indexRoom >= lessonRooms.size()) {
+                        indexRoom = 0;
+                    }
                     newLesson = new Lesson(courses.get(random.nextInt(courses.size())).getId(),
                             groups.get(k).getId(),
-                            teachers.get(random.nextInt(teachers.size())).getId(),
-                             Long.valueOf(i),
+                            teachers.get(indexTeacher).getId(),
+                            Long.valueOf(i),
                             lessonTimes.get(j).getId(),
-                            lessonRooms.get(random.nextInt(lessonRooms.size() - 1)).getId());
+                            lessonRooms.get(indexRoom).getId());
+                    indexRoom++;
+                    indexTeacher++;
                     try {
                         lessonService.add(newLesson);
                         logger.debug("add lesson {}", newLesson);
@@ -244,12 +260,10 @@ public class TestData {
                     }
                 }
             }
-
-
         }
     }
 
-    private String getPassword() {
+    private String generatePassword() {
 
         char[] password = new char[random.nextInt(5) + 8];
         for (int i = 0; i < password.length; i++) {
@@ -257,5 +271,21 @@ public class TestData {
         }
         return String.valueOf(password);
     }
+
+    private <T> T random(T[] values) {
+        return values[random.nextInt(values.length)];
+    }
+
+    private String unique(Set<String> seen, String template) {
+        String current = String.format(template, "");
+        int num = 0;
+        while (seen.contains(current)) {
+            num++;
+            current = String.format(template, String.valueOf(num));
+        }
+        seen.add(current);
+        return current;
+    }
+
 
 }

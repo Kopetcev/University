@@ -23,7 +23,7 @@ public class CourseMapper implements RowMapper<Course> {
             return new Course(resultSet.getLong(COURSE_ID), resultSet.getString(COURSE_NAME));
 
         } catch (Exception e) {
-            logger.warn("Unable to map course", e);
+            logger.warn("Unable to map course");
             throw new RuntimeException("Unable to map row", e);
         }
     }

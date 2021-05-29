@@ -64,7 +64,7 @@ public class UserMapper implements RowMapper<User> {
                     resultSet.getString(USER_LAST_NAME));
 
         } catch (Exception e) {
-            logger.warn("Unable to map user", e);
+            logger.warn("Unable to map user");
 
             throw new RuntimeException("Unable to map row", e);
         }

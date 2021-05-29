@@ -59,7 +59,7 @@ public class JdbcGroupDao extends AbstractCrudDao<Group, Long> implements GroupD
             logger.debug("Created a new group with name = {}", entity.getName());
             return new Group(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
-            logger.warn("Unable to create a new group with name = {}", entity.getName(), e);
+            logger.warn("Unable to create a new group with name = {}", entity.getName());
             throw new DaoException("Unable to create a new group", e);
         }
     }

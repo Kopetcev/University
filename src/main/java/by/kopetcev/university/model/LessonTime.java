@@ -49,7 +49,7 @@ public class LessonTime implements Entity<Long> {
         if (o == null || getClass() != o.getClass()) return false;
         LessonTime that = (LessonTime) o;
         if (null == id) {
-            return (id == that.id);
+            return (id.equals(that.id));
         } else {
             if (!id.equals(that.id)) {
                 return false;
@@ -62,7 +62,7 @@ public class LessonTime implements Entity<Long> {
                 return false;
             }
         }
-        if (null == id) {
+        if (null == end) {
             return (end == that.end);
         } else {
             if (!end.equals(that.end)) {

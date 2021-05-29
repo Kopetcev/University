@@ -80,7 +80,7 @@ public class User implements Entity<Long> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        var user = (User) o;
         if (null == id) {
             return (id == user.id);
         } else {

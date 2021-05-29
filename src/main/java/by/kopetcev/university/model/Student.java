@@ -21,7 +21,7 @@ public class Student extends User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        Student student = (Student) o;
+        var student = (Student) o;
         return Objects.equals(groupId, student.groupId);
     }
 

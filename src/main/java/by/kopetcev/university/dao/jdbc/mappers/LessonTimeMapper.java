@@ -23,7 +23,7 @@ public class LessonTimeMapper implements RowMapper<LessonTime> {
         try {
             return new LessonTime(resultSet.getLong(LESSON_TIME_ID), resultSet.getTime(LESSON_TIME_START).toLocalTime(), resultSet.getTime(LESSON_TIME_END).toLocalTime());
         } catch (Exception e) {
-            logger.warn("Unable to map lessonTime", e);
+            logger.warn("Unable to map lessonTime");
             throw new RuntimeException("Unable to map row", e);
         }
     }

@@ -35,8 +35,8 @@ public class LessonRoom implements Entity<Long> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LessonRoom lessonRoom = (LessonRoom) o;
-        return id == lessonRoom.id &&
+        var lessonRoom = (LessonRoom) o;
+        return id.equals(lessonRoom.id) &&
                 Objects.equals(name, lessonRoom.name);
 
     }

@@ -36,7 +36,7 @@ public class LessonMapper implements RowMapper<Lesson> {
                     resultSet.getLong(TEACHER_ID), resultSet.getLong(DAY_OF_WEEK), resultSet.getLong(LESSON_TIME_ID), resultSet.getLong(LESSON_ROOM_ID));
 
         } catch (Exception e) {
-            logger.warn("Unable to map lesson", e);
+            logger.warn("Unable to map lesson");
             throw new RuntimeException("Unable to map row", e);
         }
     }

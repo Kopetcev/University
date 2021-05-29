@@ -58,7 +58,7 @@ public class JdbcLessonRoomDao extends AbstractCrudDao<LessonRoom, Long> impleme
             logger.debug("Created a new lesson room with name = {}", entity.getName() );
             return new LessonRoom(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
-            logger.warn("Unable to create a new lesson room with name = {}", entity.getName(), e);
+            logger.warn("Unable to create a new lesson room with name = {}", entity.getName());
             throw new DaoException("Unable to create a new lessonRoom", e);
         }
     }

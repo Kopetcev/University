@@ -69,7 +69,7 @@ public class JdbcRoleDao extends AbstractCrudDao<Role, Long> implements RoleDao 
             logger.debug("Created a new role with name = {}", entity.getName() );
             return new Role(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
-            logger.warn("Unable to create a new role with name = {}", entity.getName(), e);
+            logger.warn("Unable to create a new role with name = {}", entity.getName());
 
             throw new DaoException("Unable to create a new role", e);
         }

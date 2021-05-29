@@ -70,7 +70,7 @@ public class JdbcCourseDao extends AbstractCrudDao<Course, Long> implements Cour
             logger.debug("Created a new course with course name = {}", entity.getName() );
             return new Course(id.longValue(), entity.getName());
         } catch (DataAccessException e) {
-            logger.warn("Unable to create a new course with course name = {}", entity.getName(), e);
+            logger.warn("Unable to create a new course with course name = {}", entity.getName());
             throw new DaoException("Unable to create a new course", e);
         }
     }

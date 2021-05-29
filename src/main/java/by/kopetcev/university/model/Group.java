@@ -35,8 +35,8 @@ public class Group implements Entity<Long> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Group group = (Group) o;
-        return id == group.id &&
+        var group = (Group) o;
+        return id.equals(group.id) &&
                 Objects.equals(name, group.name);
     }
 

@@ -1,6 +1,5 @@
 package by.kopetcev.university.model;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class Lesson implements Entity<Long> {
@@ -91,7 +90,7 @@ public class Lesson implements Entity<Long> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Lesson lesson = (Lesson) o;
+        var lesson = (Lesson) o;
         if (null == id) {
             return (id == lesson.id);
         } else {

@@ -22,7 +22,7 @@ public class GroupMapper implements RowMapper<Group> {
             return new Group(resultSet.getLong(GROUP_ID), resultSet.getString(GROUP_NAME));
 
         } catch (Exception e) {
-            logger.warn("Unable to map group", e);
+            logger.warn("Unable to map group");
             throw new RuntimeException("Unable to map row", e);
         }
     }

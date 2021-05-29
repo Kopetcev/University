@@ -22,7 +22,7 @@ public class LessonRoomMapper implements RowMapper<LessonRoom> {
             return new LessonRoom(resultSet.getLong(LESSON_ROOM_ID), resultSet.getString(LESSON_ROOM_NAME));
 
         } catch (Exception e) {
-            logger.warn("Unable to map lessonRoom", e);
+            logger.warn("Unable to map lessonRoom");
             throw new RuntimeException("Unable to map row", e);
         }
     }

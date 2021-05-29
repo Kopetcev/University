@@ -96,7 +96,7 @@ public class JdbcLessonDao extends AbstractCrudDao<Lesson, Long> implements Less
             return Optional.ofNullable(jdbcTemplate.queryForObject(FIND_BY_ID, lessonMapper, id));
 
         } catch (EmptyResultDataAccessException e) {
-            logger.debug("Lesson with id =" + id + " not found");
+            logger.debug("Lesson with id ={} not found", id);
             return Optional.empty();
         }
     }

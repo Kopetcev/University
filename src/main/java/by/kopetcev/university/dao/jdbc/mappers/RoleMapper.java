@@ -25,7 +25,7 @@ public class RoleMapper implements RowMapper<Role> {
             return new Role(resultSet.getLong(ROLE_ID), resultSet.getString(ROLE_NAME));
 
         } catch (Exception e) {
-            logger.warn("Unable to map role", e);
+            logger.warn("Unable to map role");
 
             throw new RuntimeException("Unable to map row", e);
         }

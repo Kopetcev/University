@@ -1,0 +1,46 @@
+html {
+    position:relative;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    position:relative;
+    width: 100%;
+    height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.button-pbIsh {
+    font-size: 30px;
+    color: #fff;
+    background-color: #70c381;
+    border-color: #70c381;
+    margin: 120px;
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    border:none;
+    outline: none;
+  }
+
+.main-button {
+   display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+
