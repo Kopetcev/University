@@ -7,6 +7,9 @@ public class Course implements Entity<Long> {
     private Long id;
     private String name;
 
+    public Course() {
+    }
+
     public Course(String name) {
         this.name = name;
     }

@@ -6,6 +6,9 @@ public class Group implements Entity<Long> {
     private Long id;
     private String name;
 
+    public Group() {
+    }
+
     public Group(String name) {
         this.name = name;
     }

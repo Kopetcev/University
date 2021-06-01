@@ -11,6 +11,9 @@ public class Lesson implements Entity<Long> {
     private Long lessonTimeId;
     private Long lessonRoomId;
 
+    public Lesson() {
+    }
+
     public Lesson(Long courseId, Long groupId, Long teacherId, Long dayOfWeek, Long lessonTimeId, Long lessonRoomId) {
         this.courseId = courseId;
         this.groupId = groupId;

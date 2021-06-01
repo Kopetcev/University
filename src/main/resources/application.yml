@@ -1,4 +1,11 @@
-datasource:
-  url: ${UNIVERSITY.DB.URL}
-  username: ${UNIVERSITY.DB.USERNAME}
-  password: ${UNIVERSITY.DB.PASSWORD}
+spring:
+  datasource:
+    url: ${UNIVERSITY.DB.URL}
+    username: ${UNIVERSITY.DB.USERNAME}
+    password: ${UNIVERSITY.DB.PASSWORD}
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+

@@ -91,10 +91,12 @@ CREATE TABLE students
 (
     student_user_id INT UNIQUE NOT NULL PRIMARY KEY,
     group_id        INT,
-    FOREIGN KEY (student_user_id) REFERENCES users,
+    FOREIGN KEY (student_user_id) REFERENCES users
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     FOREIGN KEY (group_id) REFERENCES groups
         ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
 );
 
 CREATE TABLE lessons
@@ -102,16 +104,25 @@ CREATE TABLE lessons
     lesson_id      SERIAL NOT NULL PRIMARY KEY,
     course_id      INT    NOT NULL,
     group_id       INT    NOT NULL,
-    teacher_id     INT    NOT NULL,
-    day_of_week_id SMALLINT    NOT NULL,
-    lesson_time_id INT    NOT NULL,
-    lesson_room_id INT    NOT NULL,
-    FOREIGN KEY (lesson_time_id) REFERENCES lesson_times,
-    FOREIGN KEY (day_of_week_id) references day_of_week,
-    FOREIGN KEY (group_id) REFERENCES groups,
-    FOREIGN KEY (course_id) REFERENCES courses,
-    FOREIGN KEY (teacher_id) REFERENCES teachers,
-    FOREIGN KEY (lesson_room_id) REFERENCES lesson_rooms,
+    teacher_id     INT,
+    day_of_week_id SMALLINT,
+    lesson_time_id INT,
+    lesson_room_id INT,
+    FOREIGN KEY (lesson_time_id) REFERENCES lesson_times
+        ON UPDATE CASCADE,
+    FOREIGN KEY (day_of_week_id) references day_of_week
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES groups
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (teacher_id) REFERENCES teachers
+        ON UPDATE CASCADE,
+    FOREIGN KEY (lesson_room_id) REFERENCES lesson_rooms
+        ON UPDATE CASCADE,
     CONSTRAINT teacher_unique UNIQUE (teacher_id, lesson_time_id, day_of_week_id),
     CONSTRAINT groups_unique UNIQUE (group_id, lesson_time_id, day_of_week_id),
     CONSTRAINT lesson_rooms_unique UNIQUE (lesson_room_id, lesson_time_id, day_of_week_id)

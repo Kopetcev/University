@@ -6,6 +6,9 @@ public class Student extends User {
 
     private Long groupId;
 
+    public Student() {
+    }
+
     public Student(String login, String password, String email, String firstName, String lastName, Long groupId) {
         super(login, password, email, firstName, lastName);
         this.groupId = groupId;
@@ -13,6 +16,14 @@ public class Student extends User {
 
     public Student(Long id, String login, String password, String email, String firstName, String lastName, Long groupId) {
         super(id, login, password, email, firstName, lastName);
+        this.groupId = groupId;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 

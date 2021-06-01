@@ -3,6 +3,7 @@ package by.kopetcev.university.model;
 import java.util.Objects;
 
 public class User implements Entity<Long> {
+
     private Long id;
     private String login;
     private String password;

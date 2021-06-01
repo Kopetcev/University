@@ -215,12 +215,16 @@ public class TestData {
     private void assignStudent() {
         List<User> users = userService.findAll();
         List<Group> groups = groupService.findAll();
-        for (int i = 0; i < groups.size(); i++) {
+        User user;
+        Group group;
+        for (int i = 0; i < groups.size() * 20; i++) {
+            user = users.get(i + COURSE_NAMES.length + ROLES.length);
+            group = groups.get(random.nextInt(groups.size() - 1));
             try {
-                userService.assignStudent(users.get(i + COURSE_NAMES.length + ROLES.length).getId(), groups.get(i).getId());
-                logger.debug("Assign {} to Student with {}", users.get(i), groups.get(i));
+                userService.assignStudent(user.getId(), group.getId());
+                logger.debug("Assign {} to Student with {}", user, group);
             } catch (Exception e) {
-                logger.debug("Unable to assign {} to Student with {}", users.get(i), groups.get(i));
+                logger.debug("Unable to assign {} to Student with {}", user, group);
             }
         }
     }

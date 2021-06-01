@@ -1,38 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>University</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link rel="stylesheet" href="/resources/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+            crossorigin="anonymous"></script>
+    <link rel="icon"
+          type="image/svg"
+          href="/resources/images/favicon.png">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="/"><img src="/resources/images/shire_logo.svg" alt="" width="120" height="120"
                                               class="d-inline-block align-text-top"> </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" href="/schedule">Schedule</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="/administration">Administration</a>
+                </li>
             </ul>
+            <div class="d-flex">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <button type="button" class="m-2 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#singIn" style="background-color: #b5b5b5;">
+                            Sing in
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="m-2 btn btn-secondary" data-bs-toggle="modal"
+                                data-bs-target="#register" style="background-color: #b5b5b5;">
+                            Sing up
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
-<div class="main-button">
-    <form action="/schedule" >
-        <button class="button-pbIsh" >ПЫЩ</button>
-    </form>
+<div class="main">
+    <div class="h1-wrapper px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1>Welcome to University</h1>
+        <div class="rounded mx-auto d-block">
+            <div class="image-container pb-md-5 col-lg-12 col-md-12 col-sm-12">
+                <img src="/resources/images/index.png" alt="big-image" class="rounded mx-auto d-block">
+            </div>
+        </div>
+    </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="register" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" th:action="@{/user/create}" th:object="${user}" class="col card p-3 mb-5">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Sing up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="main">
+                    <div class="form-container container d-flex flex-column justify-content-center ">
+                        <span class="form-desc text-center mb-3">Enter your details</span>
+                        <input th:value="*{login}" name="login" type="text" id="login" class="form-control mt-2 mb-4 text-center" placeholder="login">
+                        <input th:value="*{password}" name="password"   type="password" id="password" class="form-control mb-4 text-center" placeholder="password">                        <input th:value="*{firstName}" name="firstName"   type="text" id="firstName" class="form-control mb-4 text-center" placeholder="first name">
+                        <input th:value="*{lastName}" name="lastName" id="lastName" class="form-control mb-4 text-center" placeholder="last name">
+                        <input th:value="*{email}" name="email" type="text" id="email" class="form-control mb-4 text-center" placeholder="email">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button  name="register-submit" type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="singIn" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" th:action="@{/}" th:object="${user}" class="col card p-3 mb-5">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLab">Sing up</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="main">
+                    <div class="form-container container d-flex flex-column justify-content-center ">
+                        <input th:value="*{login}" name="login" type="text" id="loginIn" class="form-control mt-2 mb-4 text-center" placeholder="login">
+                        <input th:value="*{password}" name="password"   type="password" id="passwordIn" class="form-control mb-4 text-center" placeholder="password">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button  name="register-submit" type="submit" class="btn btn-primary" disabled>Sing in</button>
+                </div>
+            </form>
+    </div>
+</div>
+
 <footer class="footer">
-    <div class="text-center p-3" >
+    <div class="text-center p-3">
         © 2020 Copyright: University
     </div>
 </footer>

@@ -2,6 +2,8 @@ package by.kopetcev.university.model;
 
 public class Teacher extends User {
 
+    public Teacher() {
+    }
 
     public Teacher(String login, String password, String email, String firstName, String lastName) {
         super(login, password, email, firstName, lastName);

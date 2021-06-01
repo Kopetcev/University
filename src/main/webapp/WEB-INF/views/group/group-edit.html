@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Edit '+${group.name}">Group</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" href="/resources/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+            crossorigin="anonymous"></script>
+    <link rel="icon"
+          type="image/svg"
+          href="/resources/images/favicon.png">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="/resources/images/shire_logo.svg" alt="" width="120" height="120"
+                                              class="d-inline-block align-text-top"> </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/schedule">Schedule</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/administration">Administration</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="main">
+    <div class="container">
+        <div class="h1-wrapper px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <h3>Edit group</h3>
+            <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                <div class="table-wrapper table-responsive">
+                    <form th:method="PATCH" th:action="@{/group/{id}/edit (id = ${group.id})}" th:object="${group}" class="col card p-3 mb-5">
+                        <table class="table">
+                            <thead>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            </thead>
+                            <tr>
+                                <td>Group name</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input id="name" placeholder="Enter new group name" required type="text" th:field="*{name}"
+                                               class="form-control"/>
+                                    </div>
+                                </td>
+                        </table>
+                        <input type="submit" class="btn btn-secondary btn-lg" value="Edit group">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="text-center p-3">
+        © 2020 Copyright: University
+    </div>
+</footer>
+</body>
+</html>

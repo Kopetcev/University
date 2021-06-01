@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" href="/resources/css/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
+            crossorigin="anonymous"></script>
+    <link rel="icon"
+          type="image/svg"
+          href="/resources/images/favicon.png">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="/resources/images/shire_logo.svg" alt="" width="120" height="120"
+                                              class="d-inline-block align-text-top"> </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/schedule">Schedule</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button"
+                    role="tab">Users
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="teachers-tab" data-bs-toggle="tab" data-bs-target="#teacher" type="button"
+                    role="tab">Teachers
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button"
+                    role="tab">Students
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="lesson-tab" data-bs-toggle="tab" data-bs-target="#lesson" type="button"
+                    role="tab">Lessons
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" type="button"
+                    role="tab">Schedule
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="course-tab" data-bs-toggle="tab" data-bs-target="#course" type="button"
+                    role="tab">Courses
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="group-tab" data-bs-toggle="tab" data-bs-target="#group" type="button"
+                    role="tab">Groups
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="users" role="tabpanel">
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Email</th>
+                <th scope="col">Login</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                </thead>
+                <tbody>
+                <div th:each="user, stat : ${users}">
+                    <tr>
+                        <td><a th:text="${stat.index+1}">#</a></td>
+                        <td><a th:text="${user.firstName}">First</a></td>
+                        <td><a th:text="${user.lastName}">Last</a></td>
+                        <td><a th:text="${user.email}">Email</a></td>
+                        <td><a th:text="${user.login}">Login</a></td>
+                        <td><a title="show" th:href="@{/user/{id}(id=${user.id})}"><img
+                                src="/resources/images/view.svg" alt="" width="20" height="20"> </a></td>
+                        <td><a title="edit" th:href="@{/user/{id}/edit(id=${user.id})}"><img
+                                src="/resources/images/pencil.svg" alt="" width="20" height="20"> </a></td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/user/{id}/delete(id = ${user.id})}"><button type="submit" class="btn btn-default">
+                                <img src="/resources/images/recycle-bin.svg" width="20" height="20"/></button></form>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="teacher" role="tabpanel">
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <button type="button" class="btn btn-secondary"><a href="/teacher/new"
+                                                                   style="text-decoration: none; color: white">Add teacher</a></button>
+            </div>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Email</th>
+                <th scope="col">Login</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                </thead>
+                <tbody>
+                <div th:each="teacher, stat : ${teachers}">
+                    <tr>
+                        <td><a th:text="${stat.index+1}">#</a></td>
+                        <td><a th:text="${teacher.firstName}">First</a></td>
+                        <td><a th:text="${teacher.lastName}">Last</a></td>
+                        <td><a th:text="${teacher.email}">Email</a></td>
+                        <td><a th:text="${teacher.login}">Login</a></td>
+                        <td><a title="show" th:href="@{/teacher/{id}(id=${teacher.id})}"><img
+                                src="/resources/images/view.svg" alt="" width="20" height="20"> </a></td>
+                        <td><a title="edit" th:href="@{/teacher/{id}/edit(id=${teacher.id})}"><img
+                                src="/resources/images/pencil.svg" alt="" width="20" height="20"> </a></td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/teacher/{id}/delete(id = ${teacher.id})}"><button type="submit" class="btn btn-default">
+                                <img src="/resources/images/recycle-bin.svg" width="20" height="20"/></button></form>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="student" role="tabpanel">
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <button type="button" class="btn btn-secondary"><a href="/student/new"
+                                                                   style="text-decoration: none; color: white">Add student</a></button>
+            </div>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Group</th>
+                <th scope="col">Email</th>
+                <th scope="col">Login</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                </thead>
+                <tbody>
+                <div th:each="student, stat : ${students}">
+                    <tr>
+                        <td><a th:text="${stat.index+1}">#</a></td>
+                        <td><a th:text="${student.firstName}">First</a></td>
+                        <td><a th:text="${student.lastName}">Last</a></td>
+                        <td><a th:text="${groups[student.groupId][0].name}">Group</a></td>
+                        <td><a th:text="${student.email}">Email</a></td>
+                        <td><a th:text="${student.login}">Login</a></td>
+                        <td><a title="show" th:href="@{/student/{id}(id=${student.id})}"><img
+                                src="/resources/images/view.svg" alt="" width="20" height="20"> </a></td>
+                        <td><a title="edit" th:href="@{/student/{id}/edit(id=${student.id})}"><img
+                                src="/resources/images/pencil.svg" alt="" width="20" height="20"> </a></td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/student/{id}/delete(id = ${student.id})}"><button type="submit" class="btn btn-default">
+                                <img src="/resources/images/recycle-bin.svg" width="20" height="20"/></button></form>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="lesson" role="tabpanel">
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <button type="button" class="btn btn-secondary"><a href="/lesson/new" style="text-decoration: none; color: white">Add lesson</a></button>
+            </div>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <th scope="col">#</th>
+                <th scope="col">Course</th>
+                <th scope="col">Teacher</th>
+                <th scope="col">Group</th>
+                <th scope="col">Educational audience</th>
+                <th scope="col">Day of week</th>
+                <th scope="col">Time</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                </thead>
+                <tbody>
+                <div th:each="lesson, stat : ${lessons}">
+                    <tr>
+                        <td><a th:text="${stat.index+1}">#</a></td>
+                        <td><a th:text="${lesson.course.name}">Course</a></td>
+                        <td><a th:text="${lesson.teacher.firstName} + ' ' + ${lesson.teacher.lastName}">Teacher</a></td>
+                        <td><a th:text="${lesson.group.name}">Group</a></td>
+                        <td><a th:text="${lesson.lessonRoom.name}">Educational audience</a></td>
+                        <td><a th:text="${lesson.dayOfWeek}">Day of week</a></td>
+                        <td><a th:text="${lesson.lessonTime.start} + '-' + ${lesson.lessonTime.end}">Time</a></td>
+                        <td><a title="show" th:href="@{/lesson/{id}(id = ${lesson.id})}"><img
+                                src="/resources/images/view.svg" alt="" width="20" height="20"> </a></td>
+                        <td><a title="edit" th:href="@{/lesson/{id}/edit(id = ${lesson.id})}"><img
+                                src="/resources/images/pencil.svg" alt="" width="20" height="20"> </a></td>
+                        <td> <form th:method="DELETE" th:action="@{/lesson/{id}/delete(id = ${lesson.id})}"><button type="submit" class="btn btn-default">
+                            <img src="/resources/images/recycle-bin.svg" width="20" height="20"/></button></form></td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="schedule" role="tabpanel">
+            <table class="table schedule-table table-striped table-bordered">
+                <thead class="thead-light">
+                <th scope="col">Day</th>
+                <th scope="col">#</th>
+                <div th:each="group : ${groups}">
+                    <th scope="col " th:text="${group.value[0].name}">Group</th>
+                </div>
+                </thead>
+                <div th:each="lessonsOfDay, stat : ${schedule}">
+                    <tbody>
+                    <td class="table-day" rowspan="7" scope="row" th:text="${dayOfWeek[stat.index]}">Day of week
+                    </td>
+                    <div th:each="lessonsOfTime, stat : ${lessonsOfDay}">
+                        <tr>
+                            <td th:text="${stat.index + 1}">1</td>
+                            <div th:each="lesson, stat : ${lessonsOfTime.value}">
+                                <td><a th:href="@{/lesson/{id}/edit(id=${lesson.getId()})}"
+                                       th:text="${lesson.course.name}">Course</a></td>
+                            </div>
+                        </tr>
+                    </div>
+                    </tbody>
+                </div>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="course" role="tabpanel">
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <button type="button" class="btn btn-secondary"><a href="/course/new"
+                                                                   style="text-decoration: none; color: white">Add
+                    course</a></button>
+            </div>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <th scope="col">#</th>
+                <th scope="col">Course</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                </thead>
+                <tbody>
+                <div th:each="course, stat : ${courses}">
+                    <tr>
+                        <td><a th:text="${stat.index+1}">#</a></td>
+                        <td><a th:text="${course.name}">Course</a></td>
+                        <td><a title="show" th:href="@{/course/{id}(id = ${course.id})}"><img
+                                src="/resources/images/view.svg" alt="" width="20" height="20"> </a></td>
+                        <td><a title="edit" th:href="@{/course/{id}/edit(id = ${course.id})}"><img
+                                src="/resources/images/pencil.svg" alt="" width="20" height="20"> </a></td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/course/{id}/delete(id = ${course.id})}"><button type="submit" class="btn btn-default">
+                                <img src="/resources/images/recycle-bin.svg" width="20" height="20"/></button></form>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="group" role="tabpanel">
+            <div class="d-flex flex-row-reverse bd-highlight">
+                <button type="button" class="btn btn-secondary"><a href="/group/new"
+                                                                   style="text-decoration: none; color: white">Add
+                    group</a></button>
+            </div>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <th scope="col">#</th>
+                <th scope="col">Group</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                </thead>
+                <tbody>
+                <div th:each="group, stat : ${groups}">
+                    <tr>
+                        <td><a th:text="${stat.index+1}">#</a></td>
+                        <td><a th:text="${group.value[0].name}">Group</a></td>
+                        <td><a title="show" th:href="@{/group/{id}(id = ${group.value[0].id})}"><img
+                                src="/resources/images/view.svg" alt="" width="20" height="20"> </a></td>
+                        <td><a title="edit" th:href="@{/group/{id}/edit(id = ${group.value[0].id})}"><img
+                                src="/resources/images/pencil.svg" alt="" width="20" height="20"> </a></td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/group/{id}/delete(id = ${group.value[0].id})}"><button type="submit" class="btn btn-default">
+                                <img src="/resources/images/recycle-bin.svg" width="20" height="20"/></button></form>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="text-center p-3">
+        © 2020 Copyright: University
+    </div>
+</footer>
+
+</body>
+</html>

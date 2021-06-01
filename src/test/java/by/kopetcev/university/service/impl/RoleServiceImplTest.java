@@ -80,13 +80,13 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void shouldInvokeFindAllCourseByTeacher() {
-        Long teacherId = 1L;
+    void shouldInvokeFindAllRoleByUser() {
+        Long userId = 1L;
         List<Role> expected = new ArrayList<>();
         expected.add(new Role(1L, "intern"));
         expected.add(new Role(2L, "staff"));
-        when(roleDaoMock.findByUserId(teacherId)).thenReturn(expected);
-        assertThat(service.findByUserId(teacherId), equalTo(expected));
-        Mockito.verify(roleDaoMock, Mockito.times(1)).findByUserId(teacherId);
+        when(roleDaoMock.findByUserId(userId)).thenReturn(expected);
+        assertThat(service.findByUserId(userId), equalTo(expected));
+        Mockito.verify(roleDaoMock, Mockito.times(1)).findByUserId(userId);
     }
 }

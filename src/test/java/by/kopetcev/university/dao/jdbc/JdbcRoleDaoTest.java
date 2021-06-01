@@ -84,7 +84,7 @@ class JdbcRoleDaoTest extends BaseDaoTest {
     }
 
     @Test
-    void shouldFindByTeacherId() {
+    void shouldFindByUserId() {
         Long userId = 1L;
         List<Role> roles = dao.findByUserId(userId);
         assertThat(roles, hasItems(new Role(1L, "manager"),

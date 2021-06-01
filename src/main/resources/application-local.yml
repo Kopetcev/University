@@ -1,4 +1,15 @@
 spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+
+  webflux:
+    hiddenmethod:
+      filter:
+        enabled: true
+
   datasource:
     url: jdbc:postgresql://localhost:5999/university
     username: postgres
