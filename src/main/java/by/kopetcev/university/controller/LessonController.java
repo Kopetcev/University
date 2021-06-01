@@ -1,7 +1,5 @@
 package by.kopetcev.university.controller;
 
-
-import by.kopetcev.university.model.Course;
 import by.kopetcev.university.model.Lesson;
 import by.kopetcev.university.service.*;
 import org.springframework.beans.factory.annotation.Autowired;

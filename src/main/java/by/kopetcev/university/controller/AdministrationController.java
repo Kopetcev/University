@@ -15,8 +15,6 @@ public class AdministrationController {
 
     private final UserService userService;
 
-    private final RoleService roleService;
-
     private final ScheduleViewService scheduleViewService;
 
     private final LessonService lessonService;
@@ -28,9 +26,8 @@ public class AdministrationController {
     private final CourseService courseService;
 
     @Autowired
-    public AdministrationController(UserService userService, RoleService roleService, ScheduleViewService scheduleViewService, LessonService lessonService, GroupService groupService, LessonViewService lessonViewService, CourseService courseService) {
+    public AdministrationController(UserService userService,  ScheduleViewService scheduleViewService, LessonService lessonService, GroupService groupService, LessonViewService lessonViewService, CourseService courseService) {
         this.userService = userService;
-        this.roleService = roleService;
         this.scheduleViewService = scheduleViewService;
         this.lessonService = lessonService;
         this.groupService = groupService;
@@ -61,7 +58,7 @@ public class AdministrationController {
         Map<Long, List<Group>> mapGroups = new TreeMap<>(groups.stream().collect(Collectors.groupingBy(Group::getId)));
         model.addAttribute("groups", mapGroups);
 
-        List<LessonView> lessons = lessonService.findAll().stream().map(lesson -> lessonViewService.map(lesson)).collect(Collectors.toList());
+        List<LessonView> lessons = lessonService.findAll().stream().map(lessonViewService::map).collect(Collectors.toList());
         model.addAttribute("lessons", lessons);
 
         ScheduleView scheduleView = scheduleViewService.map(lessonService.findAll());

@@ -42,7 +42,7 @@ public class TeacherController {
     }
 
     @PatchMapping("/teacher/{id}/edit")
-    public String updateTeacher(@ModelAttribute("teacher") Teacher teacher, @PathVariable("id") long id) {
+    public String updateTeacher(@ModelAttribute("teacher") Teacher teacher) {
         userService.add(teacher);
         return "redirect:/teacher/" + teacher.getId()+"/edit";
     }

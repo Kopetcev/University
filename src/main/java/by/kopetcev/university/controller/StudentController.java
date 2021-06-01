@@ -37,7 +37,7 @@ public class StudentController {
     }
 
     @PatchMapping("/student/{id}/edit")
-    public String updateStudent(@ModelAttribute("student") User student, @PathVariable("id") long id) {
+    public String updateStudent(@ModelAttribute("student") User student) {
         userService.add(student);
         return "redirect:/student/" + student.getId() + "/edit";
     }
@@ -68,4 +68,3 @@ public class StudentController {
         return "redirect:/administration";
     }
 }
-

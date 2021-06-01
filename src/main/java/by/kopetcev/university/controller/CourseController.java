@@ -2,7 +2,6 @@ package by.kopetcev.university.controller;
 
 import by.kopetcev.university.model.Course;
 import by.kopetcev.university.model.TeacherCourse;
-import by.kopetcev.university.model.UserRole;
 import by.kopetcev.university.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +37,7 @@ public class CourseController {
     }
 
     @PatchMapping("/course/{id}/edit")
-    public String updateCourse(@ModelAttribute("course") Course course, @PathVariable("id") long id) {
+    public String updateCourse(@ModelAttribute("course") Course course) {
         courseService.add(course);
         return "redirect:/course/"+course.getId();
     }
@@ -69,5 +68,3 @@ public class CourseController {
     }
 
 }
-
-

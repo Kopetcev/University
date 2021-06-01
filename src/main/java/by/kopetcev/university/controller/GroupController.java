@@ -36,7 +36,7 @@ public class GroupController {
     }
 
     @PatchMapping("/group/{id}/edit")
-    public String updateGroup(@ModelAttribute("group") Group group, @PathVariable("id") long id) {
+    public String updateGroup(@ModelAttribute("group") Group group) {
         groupService.add(group);
         return "redirect:/group/"+group.getId();
     }

@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PatchMapping("/user/{id}/edit")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") long id) {
+    public String updateUser(@ModelAttribute("user") User user) {
         userService.add(user);
         return "redirect:/user/" + user.getId()+"/edit";
     }
@@ -69,4 +69,3 @@ public class UserController {
         return "redirect:/administration";
     }
 }
-
